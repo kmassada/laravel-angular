@@ -140,6 +140,23 @@ create request for validation
 php artisan make:request TaskRequest
 ```
 
+please review the following files from this branch for more details on the simple crud
+
+app/Http/Controllers/TaskController.php
+app/Http/Requests/TaskRequest.php
+app/Http/routes.php
+app/Providers/RouteServiceProvider.php
+app/Task.php
+config/app.php
+database/migrations/2015_09_09_173434_create_tasks_table.php
+database/seeds/DatabaseSeeder.php
+database/seeds/TasksTableSeeder.php
+resources/views/tasks/create.blade.php
+resources/views/tasks/edit.blade.php
+resources/views/tasks/index.blade.php
+resources/views/tasks/template.blade.php
+resources/views/tasks/view.blade.php
+
 ### Notes
 
 ```bash
