@@ -27,6 +27,10 @@ class RouteServiceProvider extends ServiceProvider
         //
 
         parent::boot($router);
+
+        $router->bind('tasks', function($id) {
+            return \App\Task::find($id);
+        });
     }
 
     /**
