@@ -1,0 +1,27 @@
+---
+ip: "192.168.33.11"
+memory: 2048
+cpus: 1
+hostname: laravel5-dev
+name: laravel5-dev
+provider: virtualbox
+
+authorize: .homestead/homestead@laravel5.dev.pub
+
+keys:
+    - .homestead/homestead@laravel5.dev
+
+folders:
+    - map: "../"
+      to: "/home/vagrant/laravel5-dev"
+
+sites:
+    - map: laravel5.dev
+      to: "/home/vagrant/laravel5-dev/public"
+
+databases:
+    - laravel5
+
+variables:
+    - key: APP_ENV
+      value: local
