@@ -33,7 +33,7 @@ git clone https://github.com/laravel/homestead.git Homestead
 mkdir -p Homestead/.homestead
 ssh-keygen -t rsa -f "Homestead/.homestead/homestead@laravel5-ng.dev" -C "homestead@laravel5-ng.dev"
 ```
-**EDIT CONFIG FILE TO MATCH NEW ENV VARIABLES**
+*EDIT CONFIG FILE TO MATCH NEW ENV VARIABLES*
 
 bring up homestead
 
@@ -140,7 +140,7 @@ create request for validation
 php artisan make:request TaskRequest
 ```
 
-please review the following files from this branch for more details on the simple crud
+please review the following files from [this branch](https://github.com/kmassada/laravel-angular/tree/basic-laravel) for more details on the simple crud
 
 app/Http/Controllers/TaskController.php
 app/Http/Requests/TaskRequest.php
