@@ -19,7 +19,7 @@ class TaskController extends Controller
     public function index()
     {
       $tasks=Task::all();
-      return view('tasks.index', compact('tasks'));
+      return response()->json($tasks);
     }
 
     /**
@@ -41,7 +41,7 @@ class TaskController extends Controller
     public function store(TaskRequest $request)
     {
         $task=Task::create($request->all());
-        return redirect()->route('tasks.index');
+        return response()->json(array('success' => true));
     }
 
     /**
@@ -51,7 +51,7 @@ class TaskController extends Controller
      * @return Response
      */
     public function show(Task $task) {
-        return view('tasks.view', compact('task'));
+        return response()->json($task);
     }
 
     /**
@@ -75,7 +75,7 @@ class TaskController extends Controller
     public function update(Task $task, TaskRequest $request)
     {
         $task->update($request->all());
-        return view('tasks.view', compact('task'));
+        return response()->json(array('success' => true));
     }
 
     /**
@@ -87,6 +87,6 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         $task->delete();
-        return redirect()->route('tasks.index');
+        return response()->json(array('success' => true));
     }
 }
