@@ -22,15 +22,51 @@ We've created a [full CRUD Laravel App](https://github.com/kmassada/laravel-angu
 
 We made Laravel an [API serving app ](https://github.com/kmassada/laravel-angular/tree/basic-laravel-api)
 
-now we focus on importing/creating the angular app at ./public from a [sample angular app](https://github.com/kmassada/angular-app.git)  
+We imported angular resources into our [hybrid app ](https://github.com/kmassada/laravel-angular/tree/angular-init)
 
-```bash
-cd public/
-git init
-git remote add origin https://github.com/kmassada/angular-app.git
-git fetch origin
-git checkout -b master --track origin/master
-rm -rf .git
+now we focus on creating basic angular tasks, like fetching data from laravel's endpoints
+
+first we cleanup the project structure, changing from MVW to MVVM, each controller a module of it's own,
+```JS
+angular.module('taskApp', [
+  // 'ngRoute',
+  'taskCtrl',
+  'taskService',
+])
+```
+
+we remove all the routing references. as a starter we are treating this app like a single page, so we move ng-app and ng-controller references
+
+```html
+<body class="container" ng-app="taskApp" ng-controller="mainController"> <div class="col-md-8 col-md-offset-2">
+```
+
+having the controller only apply to the body, different from our hybrid app architecture, where partials dictated that.
+
+we create service like functions to make calls to the api. note the use of `$.param` to transform the object into parameters that api understands
+
+```JS
+// save a task (pass in task data)
+    save : function(taskData) {
+        // console.log($.param(taskData));
+        return $http({
+            method: 'POST',
+            url: '/api/tasks',
+            headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
+            data: $.param(taskData)
+        });
+    },
+```
+
+then in our mainController we use similar tactics. we make functions with scope that we call call in our `index.html`, that leverage the service
+
+```JS
+$scope.deleteTask = function(id) {
+      $scope.loading = true;
+
+      // use the function we created in our service
+      Task.destroy(id)
+          .success(function(data) {
 ```
 
 ### License

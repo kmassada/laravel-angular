@@ -1,13 +1,13 @@
 {
-	"name": "angular.dev",
-	"version": "0.0.0",
-	"authors": [
+  "name": "angular.dev",
+  "version": "0.0.0",
+  "authors": [
     "Kenneth Massada  "
   ],
-	"description": "A starter project for AngularJS",
-	"repository": "https://github.com/kmassada/angular-app.git",
-	"license": "MIT",
-	"ignore": [
+  "description": "A starter project for AngularJS",
+  "repository": "https://github.com/kmassada/angular-app.git",
+  "license": "MIT",
+  "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
@@ -15,11 +15,15 @@
     "test",
     "tests"
   ],
-	"dependencies": {
-		"angular": "~1.4.5",
-		"angular-route": "~1.4.5",
-		"angular-loader": "~1.4.5",
-		"angular-mocks": "~1.4.5",
-		"html5-boilerplate": "~5.2.0"
-	}
+  "dependencies": {
+    "angular": "~1.4.5",
+    "angular-route": "~1.4.5",
+    "angular-loader": "~1.4.5",
+    "angular-mocks": "~1.4.5",
+    "html5-boilerplate": "~5.2.0"
+  },
+  "devDependencies": {
+    "jquery": "~2.1.4",
+    "bootstrap": "~3.3.5"
+  }
 }
