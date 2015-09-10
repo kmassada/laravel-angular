@@ -14,48 +14,23 @@ Documentation for the framework can be found on the [Laravel website](http://lar
 
 ## Official Angular Documentation
 
+Documentation for the framework can be found on the [Angular website](https://angularjs.org).
 
 ## PROJECT
 
 We've created a [full CRUD Laravel App](https://github.com/kmassada/laravel-angular/tree/basic-laravel)
 
-now we focus on changing the resources to act like an api.
+We made Laravel an [API serving app ](https://github.com/kmassada/laravel-angular/tree/basic-laravel-api)
 
-add an api prefix to our controller
+now we focus on importing/creating the angular app at ./public from a [sample angular app](https://github.com/kmassada/angular-app.git)  
 
-```
-Route::group(['prefix' => 'api'], function(){
-  Route::resource('tasks', 'TaskController');
-});
-```
-
-for routes being redirected we change the response from redirect to displaying success
-
-```
-return response()->json(array('success' => true));
-```
-
-and for views, we return json objects
-
-```
-return response()->json($tasks);
-```
-
-make sure your handlers return JSON for 404 or catch * all messages,
-
-```
-return response()->Json([
-    'message' => 'Record not found',
-], 404);
-```
-
-make laravel look elsewhere for views.
-
-```
-// config/view.php
-...
-realpath(base_path('public/views')),
-...
+```bash
+cd public/
+git init
+git remote add origin https://github.com/kmassada/angular-app.git
+git fetch origin
+git checkout -b master --track origin/master
+rm -rf .git
 ```
 
 ### License
