@@ -51,7 +51,10 @@ class Handler extends ExceptionHandler
 
         if($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException)
         {
-          return response()->view('welcome')->header('Content-Type', 'text/html');
+          return response()->Json([
+              'message' => 'Record not found',
+          ], 404);
+          // return response()->view('welcome')->header('Content-Type', 'text/html');
         }
 
         return parent::render($request, $e);
