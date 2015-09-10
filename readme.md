@@ -69,6 +69,10 @@ $scope.deleteTask = function(id) {
           .success(function(data) {
 ```
 
+*expansion*
+
+- make single page routes with route-ui, for the application's main layout
+
 ### License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)

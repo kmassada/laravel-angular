@@ -11,6 +11,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
   <link rel="stylesheet" href="css/app.css">
@@ -23,52 +25,28 @@
   <![endif]-->
 
   <!-- declare our angular app and controller -->
-<body class="container" ng-app="taskApp" ng-controller="mainController"> <div class="col-md-8 col-md-offset-2">
+<body ng-app="taskApp">
 
-    <!-- PAGE TITLE =============================================== -->
-    <div class="page-header">
-        <h2>Laravel and Angular Task Application</h2>
-        <h4>Task System</h4>
-    </div>
+    <!-- NAVIGATION -->
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="navbar-header">
+          <a class="navbar-brand" ui-sref="home">Laravel/Angular App</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a ui-sref="home">Home</a></li>
+          <li><a ui-sref="tasks">Tasks</a></li>
+          <li><a ui-sref="create">Create</a></li>
+      </ul>
+    </nav>
 
-    <!-- NEW TASK FORM =============================================== -->
-    <form ng-submit="submitTask()"> <!-- ng-submit will disable the default form action and use our function -->
-
-        <!-- Title -->
-        <div class="form-group">
-            <input type="text" class="form-control input-sm" name="title" ng-model="taskData.title" placeholder="Title">
-        </div>
-
-        <!-- Notes -->
-        <div class="form-group">
-            <input type="text" class="form-control input-lg" name="notes" ng-model="taskData.notes" placeholder="please add task details">
-        </div>
-
-        <!-- SUBMIT BUTTON -->
-        <div class="form-group text-right">
-            <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-        </div>
-    </form>
-
-    <!-- LOADING ICON =============================================== -->
-    <!-- show loading icon if the loading variable is set to true -->
-    <p class="text-center" ng-show="loading"><span class="fa fa-meh-o fa-5x fa-spin"></span></p>
-
-    <!-- THE TASKS =============================================== -->
-    <!-- hide these tasks if the loading variable is true -->
-    <div class="task" ng-hide="loading" ng-repeat="task in tasks">
-        <h3>Task #{{ task.id }} <small> {{ task.title }}</h3>
-        <p>{{ task.notes }}</p>
-
-        <p><a href="#" ng-click="deleteTask(task.id)" class="text-muted">Delete</a></p>
-    </div>
-
-</div>
+    <!-- THIS IS WHERE WE WILL INJECT OUR CONTENT ============================== -->
+    <div ui-view></div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
   -->
   <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="js/app.js"></script>
