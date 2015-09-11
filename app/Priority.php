@@ -10,6 +10,6 @@ class Priority extends Model
 
   public function task()
   {
-      return $this->belongsTo('App\Task');
+      return $this->hasMany('App\Task');
   }
 }

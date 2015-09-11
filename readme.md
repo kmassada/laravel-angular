@@ -38,16 +38,16 @@ php artisan make:seeder PrioritiesTableSeeder
 php artisan make:seeder TaskPrioritiesTableSeeder
 ```
 
-establish one to one relationship in the models
+establish one to many relationship in the models
 in task
 
 ```
-return $this->hasOne('App\Priority');
+return $this->belongsTo('App\Priority');
 ```
 
 in priority
 ```php
-return $this->belongsTo('App\Task');
+return $this->hasMany('App\Task');
 ```
 
 we modify each priority items by mapping them and iterating over them, a-la-ruby

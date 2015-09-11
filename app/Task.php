@@ -10,7 +10,7 @@ class Task extends Model
 
   public function priority()
   {
-      return $this->hasOne('App\Priority');
+      return $this->belongsTo('App\Priority');
   }
     /**
    * [tags description]
