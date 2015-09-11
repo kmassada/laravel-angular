@@ -24,7 +24,8 @@ class TaskRequest extends Request
     public function rules()
     {
         return [
-          'title'=> 'required|min:15'
+          'title'=> 'required|min:15',
+          'priority_id'=> 'required'
         ];
     }
 }

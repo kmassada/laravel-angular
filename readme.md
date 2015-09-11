@@ -24,50 +24,84 @@ We made Laravel an [API serving app ](https://github.com/kmassada/laravel-angula
 
 We imported angular resources into our [hybrid app ](https://github.com/kmassada/laravel-angular/tree/angular-init)
 
-now we focus on creating basic angular tasks, like fetching data from laravel's endpoints
+We've built the [angular app ](https://github.com/kmassada/laravel-angular/tree/laravel-angular-1.0)where we can leverage laravel for crud operations. As discussed
 
-first we cleanup the project structure, changing from MVW to MVVM, each controller a module of it's own,
-```JS
-angular.module('taskApp', [
-  // 'ngRoute',
-  'taskCtrl',
-  'taskService',
-])
+now we work to improve the laravel side of the house
+*expansion*
+#### using laravel we generate resources to attach priorities to our tasks
+
+generate resources
+
+```bash
+php artisan make:model Priority --migration
+php artisan make:seeder PrioritiesTableSeeder
+php artisan make:seeder TaskPrioritiesTableSeeder
 ```
 
-we remove all the routing references. as a starter we are treating this app like a single page, so we move ng-app and ng-controller references
+establish one to many relationship in the models
+in task
 
-```html
-<body class="container" ng-app="taskApp" ng-controller="mainController"> <div class="col-md-8 col-md-offset-2">
+```
+return $this->belongsTo('App\Priority');
 ```
 
-having the controller only apply to the body, different from our hybrid app architecture, where partials dictated that.
-
-we create service like functions to make calls to the api. note the use of `$.param` to transform the object into parameters that api understands
-
-```JS
-// save a task (pass in task data)
-    save : function(taskData) {
-        // console.log($.param(taskData));
-        return $http({
-            method: 'POST',
-            url: '/api/tasks',
-            headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
-            data: $.param(taskData)
-        });
-    },
+in priority
+```php
+return $this->hasMany('App\Task');
 ```
 
-then in our mainController we use similar tactics. we make functions with scope that we call call in our `index.html`, that leverage the service
-
-```JS
-$scope.deleteTask = function(id) {
-      $scope.loading = true;
-
-      // use the function we created in our service
-      Task.destroy(id)
-          .success(function(data) {
+we modify each priority items by mapping them and iterating over them, a-la-ruby
 ```
+Task::all()->map(function($item){
+    $item->priority_id=rand(1,4);
+  });
+```
+
+#### add helpers for Migrations
+
+In the next section we create a pivot table to allow for migration. I've discussed most of the tools I use, in a blog post: [laravel-additional-resources](http://blog.kmassada.com/laravel-5-additional-resources/)
+
+#### using laravel we add Tags to our tasks
+generate resources like the previous example we need one for tags model, its migration, and one for tags, and task tags
+
+we also need a pivot table, we generate here. `php artisan [make:migration:pivot](https://github.com/laracasts/Laravel-5-Generators-Extended) tags tasks`
+
+we also establish one to many relationship for tags and tasks. with `hasMany` and `belongsTo`
+
+we change the way we save, update or create task, by adding 2 functions, one to create the tags
+
+```php
+private function createTask(TaskRequest $request) {
+  $task=Task::create($request->all());
+  $this->syncTags($task, $request->input('tag_list'));
+
+  return $task;
+}
+```
+
+and the second one by syncing the tags
+
+```php
+private function syncTags(Task $task, array $tags) {
+  $task->tags()->sync($tags);
+}
+```
+
+of course we migrate and each seed the tables we've created
+
+```bash
+php artisan migrate
+php artisan db:seed --class="..class name.."
+```
+
+or the brute force way, reload entire table
+
+```bash
+composer dump-autoload
+php artisan migrate:refresh
+php artisan db:seed
+```
+
 
 ### License
 

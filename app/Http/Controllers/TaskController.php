@@ -40,7 +40,7 @@ class TaskController extends Controller
      */
     public function store(TaskRequest $request)
     {
-        $task=Task::create($request->all());
+        $this->createTask($request);
         return response()->json(array('success' => true));
     }
 
@@ -75,6 +75,8 @@ class TaskController extends Controller
     public function update(Task $task, TaskRequest $request)
     {
         $task->update($request->all());
+        $this->syncTags($todo, $request->input('tag_list'));
+
         return response()->json(array('success' => true));
     }
 
@@ -88,5 +90,26 @@ class TaskController extends Controller
     {
         $task->delete();
         return response()->json(array('success' => true));
+    }
+
+    /**
+     * sync tags to Task
+     * @param  Task   $task Object
+     * @return void
+     */
+    private function syncTags(Task $task, array $tags) {
+      $task->tags()->sync($tags);
+    }
+
+    /**
+     * create a Task
+     * @param  TaskRequest $request
+     * @return todo               created todo Object
+     */
+    private function createTask(TaskRequest $request) {
+      $task=Task::create($request->all());
+      $this->syncTags($task, $request->input('tag_list'));
+
+      return $task;
     }
 }
