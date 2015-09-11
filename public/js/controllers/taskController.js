@@ -13,8 +13,16 @@ angular.module('taskCtrl', [])
     // use the function we created in our service
     Task.get()
         .success(function(data) {
-            $scope.tasks = data;
+            $scope.tasks = data.tasks;
             $scope.loading = false;
+            $scope.taskTagOptions=data.tags.map(function(tag) {
+                return {id: tag.id, name:tag.name};
+            });
+            $scope.taskPriorityOptions=data.priorities.map(function(priority) {
+                return {id: priority.id, name:priority.name};
+            });
+
+                console.log($scope.taskTagOptions);
         });
 
     // function to handle submitting the form

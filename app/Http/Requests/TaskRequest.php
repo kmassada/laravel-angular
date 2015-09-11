@@ -25,7 +25,6 @@ class TaskRequest extends Request
     {
         return [
           'title'=> 'required|min:15',
-          'priority_id'=> 'required'
         ];
     }
 }

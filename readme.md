@@ -26,82 +26,54 @@ We imported angular resources into our [hybrid app ](https://github.com/kmassada
 
 We've built the [angular app ](https://github.com/kmassada/laravel-angular/tree/laravel-angular-1.0)where we can leverage laravel for crud operations. As discussed
 
-now we work to improve the laravel side of the house
-*expansion*
-#### using laravel we generate resources to attach priorities to our tasks
+Our [Laravel App](https://github.com/kmassada/laravel-angular/tree/laravel-angular-1.1) is now capable of creating a task, with tags, and priorities.
 
-generate resources
+We have to fix angular to support adding this
 
-```bash
-php artisan make:model Priority --migration
-php artisan make:seeder PrioritiesTableSeeder
-php artisan make:seeder TaskPrioritiesTableSeeder
-```
-
-establish one to one relationship in the models
-in task
-
-```
-return $this->hasOne('App\Priority');
-```
-
-in priority
-```php
-return $this->belongsTo('App\Task');
-```
-
-we modify each priority items by mapping them and iterating over them, a-la-ruby
-```
-Task::all()->map(function($item){
-    $item->priority_id=rand(1,4);
-  });
-```
-
-#### add helpers for Migrations
-
-In the next section we create a pivot table to allow for migration. I've discussed most of the tools I use, in a blog post: [laravel-additional-resources](http://blog.kmassada.com/laravel-5-additional-resources/)
-
-#### using laravel we add Tags to our tasks
-generate resources like the previous example we need one for tags model, its migration, and one for tags, and task tags
-
-we also need a pivot table, we generate here. `php artisan [make:migration:pivot](https://github.com/laracasts/Laravel-5-Generators-Extended) tags tasks`
-
-we also establish one to many relationship for tags and tasks. with `hasMany` and `belongsTo`
-
-we change the way we save, update or create task, by adding 2 functions, one to create the tags
+- eager loading
+we eager load the JSon response and adapt view so that list can show tags, and priority
 
 ```php
-private function createTask(TaskRequest $request) {
-  $task=Task::create($request->all());
-  $this->syncTags($task, $request->input('tag_list'));
-
-  return $task;
-}
+$tasks=Task::with('priority','tags')->get();
 ```
 
-and the second one by syncing the tags
+- send more data [tag options, and priority options]
+
+the login forms require options for Priority or tags, we send that in with list of tags
 
 ```php
-private function syncTags(Task $task, array $tags) {
-  $task->tags()->sync($tags);
-}
+$data['tasks']=Task::with('priority','tags')->get();
+$data['priorities']=Priority::all();
+$data['tags']=Tag::all();
 ```
 
-of course we migrate and each seed the tables we've created
-
-```bash
-php artisan migrate
-php artisan db:seed --class="..class name.."
+```php
+$data['tasks']=Task::with('priority','tags')->get();
+$data['priorities']=Priority::all();
+$data['tags']=Tag::all();
+return response()->json($data);
 ```
 
-or the brute force way, reload entire table
+- adapt form to contain selects
 
-```bash
-composer dump-autoload
-php artisan migrate:refresh
-php artisan db:seed
+learned about angular `ng-model` to bind to a data, and `ng-repeat` for loops, and `ng-options` preferable for selects
+
+```HTML
+<select type="text" class="form-control input-lg" name="priority_id" ng-model="taskData.priority_id">
+<option ng-repeat="option in taskPriorityOptions" value="{{ option.id }}">{{ option.name }}</option>
+</select>
 ```
 
+- test API
+
+while troubleshooting, a form POST on a tool like postman,  we need to submit an array,
+simulates `[3,4]`
+```
+Name=tag_list[]
+Value=3
+Name=tag_list[]
+Value=4
+```
 
 ### License
 

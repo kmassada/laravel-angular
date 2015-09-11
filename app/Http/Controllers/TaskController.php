@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Task;
+use App\Tag;
+use App\Priority;
 use App\Http\Requests;
 use App\Http\Requests\TaskRequest;
 use App\Http\Controllers\Controller;
@@ -18,8 +20,10 @@ class TaskController extends Controller
      */
     public function index()
     {
-      $tasks=Task::all();
-      return response()->json($tasks);
+      $data['tasks']=Task::with('priority','tags')->get();
+      $data['priorities']=Priority::all();
+      $data['tags']=Tag::all();
+      return response()->json($data);
     }
 
     /**
@@ -51,6 +55,7 @@ class TaskController extends Controller
      * @return Response
      */
     public function show(Task $task) {
+        $task=Task::with('priority','tags')->where('id',$task->id)->get();
         return response()->json($task);
     }
 
