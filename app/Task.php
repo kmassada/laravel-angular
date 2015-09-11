@@ -12,4 +12,11 @@ class Task extends Model
   {
       return $this->hasOne('App\Priority');
   }
+    /**
+   * [tags description]
+   * @return [type] [description]
+   */
+  public function tags() {
+      return $this->belongsToMany('App\Tag');
+  }
 }

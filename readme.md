@@ -38,7 +38,7 @@ php artisan make:seeder PrioritiesTableSeeder
 php artisan make:seeder TaskPrioritiesTableSeeder
 ```
 
-establish one to many relationship in the models
+establish one to one relationship in the models
 in task
 
 ```
@@ -57,7 +57,51 @@ Task::all()->map(function($item){
   });
 ```
 
-#### using laravel we generate resources to attach priorities to our tasks
+#### add helpers for Migrations
+
+In the next section we create a pivot table to allow for migration. I've discussed most of the tools I use, in a blog post: [laravel-additional-resources](http://blog.kmassada.com/laravel-5-additional-resources/)
+
+#### using laravel we add Tags to our tasks
+generate resources like the previous example we need one for tags model, its migration, and one for tags, and task tags
+
+we also need a pivot table, we generate here. `php artisan [make:migration:pivot](https://github.com/laracasts/Laravel-5-Generators-Extended) tags tasks`
+
+we also establish one to many relationship for tags and tasks. with `hasMany` and `belongsTo`
+
+we change the way we save, update or create task, by adding 2 functions, one to create the tags
+
+```php
+private function createTask(TaskRequest $request) {
+  $task=Task::create($request->all());
+  $this->syncTags($task, $request->input('tag_list'));
+
+  return $task;
+}
+```
+
+and the second one by syncing the tags
+
+```php
+private function syncTags(Task $task, array $tags) {
+  $task->tags()->sync($tags);
+}
+```
+
+of course we migrate and each seed the tables we've created
+
+```bash
+php artisan migrate
+php artisan db:seed --class="..class name.."
+```
+
+or the brute force way, reload entire table
+
+```bash
+composer dump-autoload
+php artisan migrate:refresh
+php artisan db:seed
+```
+
 
 ### License
 
