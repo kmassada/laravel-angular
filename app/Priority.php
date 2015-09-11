@@ -8,7 +8,7 @@ class Priority extends Model
 {
   protected $fillable=['name'];
 
-  public function task()
+  public function tasks()
   {
       return $this->hasMany('App\Task');
   }
