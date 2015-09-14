@@ -55,7 +55,7 @@ class TaskController extends Controller
      * @return Response
      */
     public function show(Task $task) {
-        $task=Task::with('priority','tags')->where('id',$task->id)->get();
+        $task=Task::with('priority','tags')->where('id',$task->id)->first();
         return response()->json($task);
     }
 
@@ -80,7 +80,7 @@ class TaskController extends Controller
     public function update(Task $task, TaskRequest $request)
     {
         $task->update($request->all());
-        $this->syncTags($todo, $request->input('tag_list'));
+        $this->syncTags($task, $request->input('tag_list'));
 
         return response()->json(array('success' => true));
     }
@@ -109,7 +109,7 @@ class TaskController extends Controller
     /**
      * create a Task
      * @param  TaskRequest $request
-     * @return todo               created todo Object
+     * @return task               created task Object
      */
     private function createTask(TaskRequest $request) {
       $task=Task::create($request->all());
