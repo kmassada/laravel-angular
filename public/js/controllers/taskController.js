@@ -3,6 +3,8 @@ angular.module('taskCtrl', [])
 
 // inject the Task service into our controller
 .controller('mainController', function($scope, $http, Task) {
+    $scope.createTask = true;
+
     // object to hold all the data for the new task form
     $scope.taskData = {};
 
@@ -21,14 +23,33 @@ angular.module('taskCtrl', [])
             $scope.taskPriorityOptions=data.priorities.map(function(priority) {
                 return {id: priority.id, name:priority.name};
             });
-
-                console.log($scope.taskTagOptions);
         });
 
     // function to handle submitting the form
-    $scope.submitTask = function() {
+    $scope.addOrEditTask = function() {
         $scope.loading = true;
 
+        if ($scope.currentTask) {
+            $scope.taskData.id=$scope.currentTask.id;
+
+            // save the task. pass in task data from the form
+            // use the function we created in our service
+            Task.update($scope.taskData)
+                .success(function(data) {
+
+                    // if successful, we'll need to refresh the task list
+                    Task.get()
+                        .success(function(getData) {
+                            $scope.tasks = getData;
+                            $scope.loading = false;
+                        });
+
+                })
+                .error(function(data) {
+                    console.log(data);
+                });
+
+        } else {
         // save the task. pass in task data from the form
         // use the function we created in our service
         Task.save($scope.taskData)
@@ -45,6 +66,8 @@ angular.module('taskCtrl', [])
             .error(function(data) {
                 console.log(data);
             });
+        }
+
     };
 
     // function to handle deleting a task
@@ -65,4 +88,23 @@ angular.module('taskCtrl', [])
             });
     };
 
+    $scope.newTask = function(id) {
+        $scope.taskData = {};
+    };
+    // function to handle editing a task
+    $scope.editTask = function(id) {
+
+        // use the function we created in our service
+        Task.show(id)
+            .success(function(data) {
+                console.log(data.tags);
+                $scope.currentTask=data;
+                $scope.taskData.title=$scope.currentTask.title;
+                $scope.taskData.notes=$scope.currentTask.notes;
+                $scope.taskData.priority_id=$scope.currentTask.priority_id;
+                $scope.taskData.tag_list=$scope.currentTask.tags.map(function(tag) {
+                    return tag.id;
+                });
+            });
+    };
 });

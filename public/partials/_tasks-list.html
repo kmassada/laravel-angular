@@ -1,0 +1,13 @@
+<!-- hide these tasks if the loading variable is true -->
+<div class="task" ng-hide="loading" ng-repeat="task in tasks">
+    <h3>Task #{{ task.id }}
+      <small> {{ task.title }}
+        <b ng-repeat="tag in task.tags">{{ tag.name }}, </b>
+        <i>--{{  task.priority.name }}--</i>
+      </small>
+    </h3>
+    <p>{{ task.notes }}</p>
+
+    <p><a href="#/tasks" ng-click="deleteTask(task.id)" class="text-muted">Delete</a>
+    <a href="#/tasks" ng-click="editTask(task.id)" class="text-muted">Edit</a></p>
+</div>

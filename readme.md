@@ -28,52 +28,50 @@ We've built the [angular app ](https://github.com/kmassada/laravel-angular/tree/
 
 Our [Laravel App](https://github.com/kmassada/laravel-angular/tree/laravel-angular-1.1) is now capable of creating a task, with tags, and priorities.
 
-We have to fix angular to support adding this
+The [Full App](https://github.com/kmassada/laravel-angular/tree/laravel-angular-1.2) is now capable of submitting a task, that contain a list of tags, and one priority.
 
-- eager loading
-we eager load the JSon response and adapt view so that list can show tags, and priority
+in this revision we accomplish few tasks
 
-```php
-$tasks=Task::with('priority','tags')->get();
+- we use the same form for edit and create in our angular controller
+
+we first create 2 new Factory prototypes in our service handler `taskService.js` hence, one for creating a single task, the other one for updating a task:
+
+```JS
+// get single tasks
+show : function(id) {
+    return $http.get('/api/tasks/' + id);
+},
+// update a task (pass in task data)
+    update : function(taskData) {
+        // console.log($.param(taskData));
+        return $http({
+            method: 'PUT',
+            url: '/api/tasks/' + taskData.id,
+            headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
+            data: $.param(taskData)
+        });
+    },
+
 ```
 
-- send more data [tag options, and priority options]
+the value `$scope.currentTask` gets set when the user clicks on edit, we use angular's `ng-click` to perform a Task.show collect a single element, and pass it's values to the form.
 
-the login forms require options for Priority or tags, we send that in with list of tags
-
-```php
-$data['tasks']=Task::with('priority','tags')->get();
-$data['priorities']=Priority::all();
-$data['tags']=Tag::all();
+```html
+<a href="#/tasks" ng-click="editTask(task.id)" class="text-muted">Edit</a></p>
 ```
 
-```php
-$data['tasks']=Task::with('priority','tags')->get();
-$data['priorities']=Priority::all();
-$data['tags']=Tag::all();
-return response()->json($data);
+we then modify the `createTask` function to `addOrEditTask` where we check for  `$scope.currentTask` and either update or create
+we also secretly handle the item id we received from `$scope.currentTask` during the GET
+
+```JS
+if ($scope.currentTask) {
+        $scope.taskData.id=$scope.currentTask.id;
+        Task.update($scope.taskData)
+        ....
 ```
+- we also included ui-bootstrap-tpls which is angular's bootstrap class.
 
-- adapt form to contain selects
-
-learned about angular `ng-model` to bind to a data, and `ng-repeat` for loops, and `ng-options` preferable for selects
-
-```HTML
-<select type="text" class="form-control input-lg" name="priority_id" ng-model="taskData.priority_id">
-<option ng-repeat="option in taskPriorityOptions" value="{{ option.id }}">{{ option.name }}</option>
-</select>
-```
-
-- test API
-
-while troubleshooting, a form POST on a tool like postman,  we need to submit an array,
-simulates `[3,4]`
-```
-Name=tag_list[]
-Value=3
-Name=tag_list[]
-Value=4
-```
+this was an attempt to make the page more esthetic. failed miserably :-p
 
 ### License
 
