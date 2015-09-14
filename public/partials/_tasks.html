@@ -4,60 +4,19 @@
 <!-- PAGE TITLE =============================================== -->
 <div class="page-header">
     <h3>Laravel and Angular Task Application</h3>
-    <h4>Task System</h4>
+    <h4>Task System | <a href="#/tasks" ng-click="newTask()">New</a></h4>
 </div>
 
 <!-- NEW TASK FORM =============================================== -->
-<form ng-submit="submitTask()"> <!-- ng-submit will disable the default form action and use our function -->
-
-    <!-- Title -->
-    <div class="form-group">
-        <input type="text" class="form-control input-sm" name="title" ng-model="taskData.title" placeholder="Title">
-    </div>
-
-    <!-- Notes -->
-    <div class="form-group">
-        <input type="text" class="form-control input-lg" name="notes" ng-model="taskData.notes" placeholder="please add task details">
-    </div>
-
-    <!-- Priority -->
-    <div class="form-group">
-        <select type="text" class="form-control input-lg" name="priority_id" ng-model="taskData.priority_id">
-        <option ng-repeat="option in taskPriorityOptions" value="{{ option.id }}">{{ option.name }}</option>
-      </select>
-    </div>
-
-    <!-- Priority -->
-    <div class="form-group">
-        <select name="multipleSelect" class="form-control input-lg" name="tags" ng-model="taskData.tag_list" multiple>
-          <option ng-repeat="option in taskTagOptions" value="{{ option.id }}">{{ option.name }}</option>
-        </select>
-    </div>
-
-    <tt>multipleSelect = {{taskData}}</tt><br/>
-
-    <!-- SUBMIT BUTTON -->
-    <div class="form-group text-right">
-        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-    </div>
-</form>
+<div ng-include="'partials/_tasks-form.html'"></div>
 
 <!-- LOADING ICON =============================================== -->
 <!-- show loading icon if the loading variable is set to true -->
-<p class="text-center" ng-show="loading"><span class="fa fa-meh-o fa-5x fa-spin"></span></p>
+<p class="text-center" ng-show="loading"><span class="fa fa-refresh fa-5x fa-spin"></span></p>
 
 <!-- THE TASKS =============================================== -->
-<!-- hide these tasks if the loading variable is true -->
-<div class="task" ng-hide="loading" ng-repeat="task in tasks">
-    <h3>Task #{{ task.id }}
-      <small> {{ task.title }}
-        <b ng-repeat="tag in task.tags">{{ tag.name }}, </b>
-        <i>--{{  task.priority.name }}--</i>
-      </h3>
-    <p>{{ task.notes }}</p>
+<div ng-include="'partials/_tasks-list.html'"></div>
 
-    <p><a href="#" ng-click="deleteTask(task.id)" class="text-muted">Delete</a></p>
-</div>
 
 </div>
 </div>

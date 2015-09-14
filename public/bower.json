@@ -20,7 +20,8 @@
     "angular-route": "~1.4.5",
     "angular-loader": "~1.4.5",
     "angular-mocks": "~1.4.5",
-    "html5-boilerplate": "~5.2.0"
+    "html5-boilerplate": "~5.2.0",
+    "angular-bootstrap": "~0.13.4"
   },
   "devDependencies": {
     "jquery": "~2.1.4",

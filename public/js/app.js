@@ -6,6 +6,7 @@ angular.module('taskApp', [
   'taskCtrl',
   'taskService',
   'ui.router',
+  'ui.bootstrap',
 ])
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -30,16 +31,19 @@ angular.module('taskApp', [
             templateUrl: 'partials/_tasks.html'
         })
 
+        .state('tasks.edit', {
+            url: '/tasks/:id/edit',
+            templateUrl: 'partials/_tasks-edit.html'
+        })
+
+        .state('tasks.view', {
+            url: '/tasks/:id',
+            templateUrl: 'partials/_tasks-view.html'
+        })
+
         // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
         .state('about', {
             // we'll get to this in a bit
         });
 
 });
-// .config(['$routeProvider', function($routeProvider) {
-// $routeProvider.when('/home', {
-//     templateUrl: 'partials/home/index.html',
-//     controller: 'HomeController'
-//     })
-//     .otherwise({redirectTo: '/home'});
-// }]);
