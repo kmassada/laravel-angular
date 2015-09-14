@@ -12,7 +12,9 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index','hello');
 });
 
-Route::resource('tasks', 'TaskController');
+Route::group(['prefix' => 'api'], function(){
+  Route::resource('tasks', 'TaskController');
+});

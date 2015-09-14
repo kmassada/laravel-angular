@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Task;
+use App\Tag;
+use App\Priority;
 use App\Http\Requests;
 use App\Http\Requests\TaskRequest;
 use App\Http\Controllers\Controller;
@@ -18,8 +20,10 @@ class TaskController extends Controller
      */
     public function index()
     {
-      $tasks=Task::all();
-      return view('tasks.index', compact('tasks'));
+      $data['tasks']=Task::with('priority','tags')->get();
+      $data['priorities']=Priority::all();
+      $data['tags']=Tag::all();
+      return response()->json($data);
     }
 
     /**
@@ -40,8 +44,8 @@ class TaskController extends Controller
      */
     public function store(TaskRequest $request)
     {
-        $task=Task::create($request->all());
-        return redirect()->route('tasks.index');
+        $this->createTask($request);
+        return response()->json(array('success' => true));
     }
 
     /**
@@ -51,7 +55,8 @@ class TaskController extends Controller
      * @return Response
      */
     public function show(Task $task) {
-        return view('tasks.view', compact('task'));
+        $task=Task::with('priority','tags')->where('id',$task->id)->first();
+        return response()->json($task);
     }
 
     /**
@@ -75,7 +80,9 @@ class TaskController extends Controller
     public function update(Task $task, TaskRequest $request)
     {
         $task->update($request->all());
-        return view('tasks.view', compact('task'));
+        $this->syncTags($task, $request->input('tag_list'));
+
+        return response()->json(array('success' => true));
     }
 
     /**
@@ -87,6 +94,27 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         $task->delete();
-        return redirect()->route('tasks.index');
+        return response()->json(array('success' => true));
+    }
+
+    /**
+     * sync tags to Task
+     * @param  Task   $task Object
+     * @return void
+     */
+    private function syncTags(Task $task, array $tags) {
+      $task->tags()->sync($tags);
+    }
+
+    /**
+     * create a Task
+     * @param  TaskRequest $request
+     * @return task               created task Object
+     */
+    private function createTask(TaskRequest $request) {
+      $task=Task::create($request->all());
+      $this->syncTags($task, $request->input('tag_list'));
+
+      return $task;
     }
 }

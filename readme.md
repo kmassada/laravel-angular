@@ -14,171 +14,65 @@ Documentation for the framework can be found on the [Laravel website](http://lar
 
 ## Official Angular Documentation
 
+Documentation for the framework can be found on the [Angular website](https://angularjs.org).
 
 ## PROJECT
 
-### Creating a new  Laravel project
+We've created a [full CRUD Laravel App](https://github.com/kmassada/laravel-angular/tree/basic-laravel)
 
-composer create
+We made Laravel an [API serving app ](https://github.com/kmassada/laravel-angular/tree/basic-laravel-api)
 
-```bash
-composer create-project laravel/laravel laravel5-ng --prefer-dist
-```
+We imported angular resources into our [hybrid app ](https://github.com/kmassada/laravel-angular/tree/angular-init)
 
-get Homestead sample dev config and setup homestead
+We've built the [angular app ](https://github.com/kmassada/laravel-angular/tree/laravel-angular-1.0)where we can leverage laravel for crud operations. As discussed
 
-```bash
-wget https://gist.githubusercontent.com/kmassada/052380e8490b8196ef87/raw/4ecb82bc37ecd6c05f49f3372121afc12aad743f/Homestead.yml
-git clone https://github.com/laravel/homestead.git Homestead
-mkdir -p Homestead/.homestead
-ssh-keygen -t rsa -f "Homestead/.homestead/homestead@laravel5-ng.dev" -C "homestead@laravel5-ng.dev"
-```
-*EDIT CONFIG FILE TO MATCH NEW ENV VARIABLES*
+Our [Laravel App](https://github.com/kmassada/laravel-angular/tree/laravel-angular-1.1) is now capable of creating a task, with tags, and priorities.
 
-bring up homestead
+We have to fix angular to support adding this
 
-```bash
-cd Homestead/
-composer install
-./homestead up
-```
-
-install few packages
-
-```bash
-composer require illuminate/html
-composer require fzaninotto/faker
-```
-
-Add to the config/app.php providers array:
-
-```
-    Illuminate\Html\HtmlServiceProvider::class,
-```
-
-Add to the config/app.php aliases array:
-
-```
-    'Html'      => Illuminate\Html\HtmlFacade::class,
-    'Form'      => Illuminate\Html\FormFacade::class,
-```
-
-### Setup laravel for crud
-
-create Model, Controller, View
-
-```bash
-php artisan make:model Task
-php artisan make:controller TaskController
-mkdir -p resources/views/tasks
-touch resources/views/tasks/{template,index,create,edit,view}.blade.php
-```
-
-make seeds and migrations
-
-```bash
-php artisan make:seeder TasksTableSeeder
-php artisan make:migration create_tasks_table
-```
-
-fill in data per ERD then migrate
-
-```bash
-php artisan migrate
-```
-
-verify model fields has fillable data at app/Task.php
+- eager loading
+we eager load the JSon response and adapt view so that list can show tags, and priority
 
 ```php
-class Task extends Model
-{
-  protected $fillable=['*'];
-}
+$tasks=Task::with('priority','tags')->get();
 ```
 
-verify database/seeds/DatabaseSeeder.php has the TasksTableSeeder class
+- send more data [tag options, and priority options]
+
+the login forms require options for Priority or tags, we send that in with list of tags
 
 ```php
-$this->call(TasksTableSeeder::class);
+$data['tasks']=Task::with('priority','tags')->get();
+$data['priorities']=Priority::all();
+$data['tags']=Tag::all();
 ```
 
-seed db
-
-```bash
-php artisan db:seed
+```php
+$data['tasks']=Task::with('priority','tags')->get();
+$data['priorities']=Priority::all();
+$data['tags']=Tag::all();
+return response()->json($data);
 ```
 
-create routes
+- adapt form to contain selects
 
-```bash
-$ vi app/Http/routes.php
-Route::resource('task', 'TaskController');
+learned about angular `ng-model` to bind to a data, and `ng-repeat` for loops, and `ng-options` preferable for selects
+
+```HTML
+<select type="text" class="form-control input-lg" name="priority_id" ng-model="taskData.priority_id">
+<option ng-repeat="option in taskPriorityOptions" value="{{ option.id }}">{{ option.name }}</option>
+</select>
 ```
 
-verify routes
+- test API
 
-```bash
-php artisan route:list
+while troubleshooting, a form POST on a tool like postman,  we need to submit an array,
+simulates `[3,4]`
 ```
-
-bind parameter to model in `app/Providers/RouteServiceProvider.php`
-
-```PHP
-public function boot(Router $router)
-{
-    parent::boot($router);
-
-    $router->bind('tasks', function($id) {
-        return \App\Task::find($id);
-    });
-}
-```
-
-create request for validation
-
-```bash
-php artisan make:request TaskRequest
-```
-
-please review the following files from [this branch](https://github.com/kmassada/laravel-angular/tree/basic-laravel) for more details on the simple crud
-
-app/Http/Controllers/TaskController.php
-app/Http/Requests/TaskRequest.php
-app/Http/routes.php
-app/Providers/RouteServiceProvider.php
-app/Task.php
-config/app.php
-database/migrations/2015_09_09_173434_create_tasks_table.php
-database/seeds/DatabaseSeeder.php
-database/seeds/TasksTableSeeder.php
-resources/views/tasks/create.blade.php
-resources/views/tasks/edit.blade.php
-resources/views/tasks/index.blade.php
-resources/views/tasks/template.blade.php
-resources/views/tasks/view.blade.php
-
-### Notes
-
-```bash
-php artisan make:...
-
-make:controller             
-make:middleware             
-make:migration              
-make:provider               
-make:listener               
-make:request                
-make:console                
-make:command                
-make:seeder                 
-make:policy                 
-make:model                  
-make:event                  
-make:job  
-
-------------------
-
-php artisan route:list   
+Name=tag_list[]
+Value=3
+Name=tag_list[]
+Value=4
 ```
 
 ### License
