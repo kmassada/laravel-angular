@@ -1,0 +1,34 @@
+<form ng-submit="addOrEditTask()"> <!-- ng-submit will disable the default form action and use our function -->
+
+    <!-- Title -->
+    <div class="form-group">
+        <input type="text" class="form-control input-sm" name="title" ng-model="taskData.title" placeholder="Title">
+    </div>
+
+    <!-- Notes -->
+    <div class="form-group">
+        <textarea type="text" class="form-control input-lg" name="notes" ng-model="taskData.notes" placeholder="please add task details">
+        </textarea>
+    </div>
+
+    <!-- Priority -->
+    <div class="form-group">
+        <select type="text" class="form-control input-sm" name="priority_id" ng-model="taskData.priority_id"
+        ng-options="option.id as option.name for option in taskPriorityOptions">
+      </select>
+    </div>
+
+    <!-- Tags -->
+    <div class="form-group">
+        <select name="multipleSelect" class="form-control input-sm" name="tags" ng-model="taskData.tag_list"
+        ng-options="option.id as option.name for option in taskTagOptions" multiple>
+        </select>
+    </div>
+
+    <tt>TaskData = {{taskData}}</tt><br/>
+
+    <!-- SUBMIT BUTTON -->
+    <div class="form-group text-right">
+        <button type="submit" class="btn btn-primary btn-lg">{{ taskData.title ? 'Update' : 'Save' }}</button>
+    </div>
+</form>
