@@ -15,6 +15,7 @@ angular.module('taskApp')
     // use the function we created in our service
     Task.get()
         .success(function(data) {
+            console.log(data.user);
             $scope.tasks = data.tasks;
             $scope.loading = false;
             $scope.taskTagOptions=data.tags.map(function(tag) {

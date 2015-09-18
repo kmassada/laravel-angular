@@ -1,7 +1,7 @@
 angular.module('taskApp')
 .controller('UserAuthController', function ($rootScope, $scope, $location, $window, Auth) {
 		function successAuth(res) {
-			console.log(res);
+			// console.log(res);
 			$window.sessionStorage.token = res.token;
 			window.location = "/home";
 		}

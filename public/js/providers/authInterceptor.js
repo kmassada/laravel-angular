@@ -4,7 +4,7 @@ angular.module('taskApp')
 	return {
 		request: function (config) {
 			config.headers = config.headers || {};
-                console.log(config);
+                // console.log(config);
 			if ($window.sessionStorage.token) {
 				config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
 			}
