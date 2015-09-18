@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use JWTAuth;
+use Auth;
 use App\Task;
 use App\Tag;
 use App\User;
@@ -26,11 +27,8 @@ class TaskController extends Controller
       $token = JWTAuth::getToken();
       $user = JWTAuth::toUser($token);
 
-      // if (! $user = JWTAuth::parseToken()->authenticate()) {
-      //     return response()->json(['user_not_found'], 404);
-      // }
-      $data['user']=$user;
-      $data['tasks']=Task::with('priority','tags')->get();
+      $data['user']=\Auth::User();
+      $data['tasks']=Task::with('priority','tags')->own()->get();
       $data['priorities']=Priority::all();
       $data['tags']=Tag::all();
       return response()->json($data);
@@ -64,20 +62,9 @@ class TaskController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show(Task $task) {
+    public function show(Task $task, TaskRequest $request) {
         $task=Task::with('priority','tags')->where('id',$task->id)->first();
         return response()->json($task);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit(Task $task)
-    {
-        return view('tasks.edit', compact('task'));
     }
 
     /**
@@ -101,7 +88,7 @@ class TaskController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy(Task $task)
+    public function destroy(Task $task, TaskRequest $request)
     {
         $task->delete();
         return response()->json(array('success' => true));

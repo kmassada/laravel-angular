@@ -43,16 +43,22 @@ class Handler extends ExceptionHandler
     {
         // Handles JWT exceptions
         if ($e instanceof Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-            return response()->json(['token_expired'], $e->getStatusCode());
+            return response()->json([
+              'token_expired'
+            ], $e->getStatusCode());
         }
         elseif ($e instanceof Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-            return response()->json(['token_invalid'], $e->getStatusCode());
+            return response()->json([
+              'token_invalid'
+            ], $e->getStatusCode());
         }
         elseif ($e instanceof Tymon\JWTAuth\Exceptions\JWTException) {
-            return response()->json(['token_absent'], $e->getStatusCode());
+            return response()->json([
+              'token_absent'
+            ], $e->getStatusCode());
         }
 
-        // Handles Object not found for api paage
+        // Handles Object not found for api page
         if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
             return response()->Json([
               'message' => 'Record not found',

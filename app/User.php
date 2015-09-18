@@ -42,4 +42,12 @@ class User extends Model implements AuthenticatableContract,
     {
       $this->attributes['password'] = Hash::make($value);
     }
+
+    /**
+     * return given user role
+     * @return Role
+     */
+    public function role() {
+      return $this->belongsTo('\App\Role');
+    }
 }
