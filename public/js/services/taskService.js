@@ -1,16 +1,16 @@
-angular.module('taskService', [])
+angular.module('taskApp')
 
-.factory('Task', function($http) {
+.factory('Task', function($http, url) {
 
     return {
         // get all the tasks
         get : function() {
-            return $http.get('/api/tasks');
+            return $http.get(url.BASE_API + '/api/tasks');
         },
 
         // get single tasks
         show : function(id) {
-            return $http.get('/api/tasks/' + id);
+            return $http.get(url.BASE_API + '/api/tasks/' + id);
         },
 
         // save a task (pass in task data)
@@ -18,7 +18,7 @@ angular.module('taskService', [])
             // console.log($.param(taskData));
             return $http({
                 method: 'POST',
-                url: '/api/tasks',
+                url: url.BASE_API + '/api/tasks',
                 headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
                 data: $.param(taskData)
             });
@@ -29,7 +29,7 @@ angular.module('taskService', [])
             // console.log($.param(taskData));
             return $http({
                 method: 'PUT',
-                url: '/api/tasks/' + taskData.id,
+                url: url.BASE_API +'/api/tasks/' + taskData.id,
                 headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
                 data: $.param(taskData)
             });
@@ -37,8 +37,8 @@ angular.module('taskService', [])
 
         // destroy a task
         destroy : function(id) {
-            return $http.delete('/api/tasks/' + id);
+            return $http.delete(url.BASE_API + '/api/tasks/' + id);
         }
-    }
+    };
 
 });

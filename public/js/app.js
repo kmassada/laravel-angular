@@ -2,13 +2,21 @@
 
 // Declare app level module which depends on views, and components
 angular.module('taskApp', [
-  // 'ngRoute',
-  'taskCtrl',
-  'taskService',
   'ui.router',
   'ui.bootstrap',
+  'angular-loading-bar',
 ])
-.config(function($stateProvider, $urlRouterProvider) {
+.constant('url', {
+   BASE: 'http://laravel5-ng.dev',
+   BASE_API: 'http://laravel5-ng.dev/v1'
+})
+
+.config(function($stateProvider, $httpProvider, $urlRouterProvider, cfpLoadingBarProvider) {
+
+    cfpLoadingBarProvider.includeBar = true;
+    cfpLoadingBarProvider.includeSpinner = false;
+
+    $httpProvider.interceptors.push('authInterceptor');
 
     $urlRouterProvider.otherwise('/home');
 
@@ -41,9 +49,27 @@ angular.module('taskApp', [
             templateUrl: 'partials/_tasks-view.html'
         })
 
+        .state('users', {
+            url: '/users',
+            templateUrl: 'partials/_users.html'
+        })
+
+        .state('login', {
+            url: '/login',
+            templateUrl: 'partials/_home-login.html',
+            controller: 'UserAuthController'
+        })
+
+        .state('register', {
+            url: '/register',
+            templateUrl: 'partials/_home-register.html',
+            controller: 'UserAuthController'
+        })
+
         // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
         .state('about', {
             // we'll get to this in a bit
         });
+
 
 });

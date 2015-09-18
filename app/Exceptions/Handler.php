@@ -5,7 +5,6 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -25,8 +24,7 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $e
-     * @return void
+     * @param \Exception $e
      */
     public function report(Exception $e)
     {
@@ -36,27 +34,41 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $e
+     * @param \Illuminate\Http\Request $request
+     * @param \Exception               $e
+     *
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $e)
     {
-        if ($e instanceof ModelNotFoundException) {
-            // $e = new NotFoundHttpException($e->getMessage(), $e);
+        // Handles JWT exceptions
+        if ($e instanceof Tymon\JWTAuth\Exceptions\TokenExpiredException) {
+            return response()->json([
+              'token_expired'
+            ], $e->getStatusCode());
+        }
+        elseif ($e instanceof Tymon\JWTAuth\Exceptions\TokenInvalidException) {
+            return response()->json([
+              'token_invalid'
+            ], $e->getStatusCode());
+        }
+        elseif ($e instanceof Tymon\JWTAuth\Exceptions\JWTException) {
+            return response()->json([
+              'token_absent'
+            ], $e->getStatusCode());
+        }
+
+        // Handles Object not found for api page
+        if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
             return response()->Json([
-                'message' => 'Record not found',
+              'message' => 'Record not found',
             ], 404);
         }
-
-        if($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException)
-        {
-          return response()->Json([
+        if ($e instanceof \Symfony\Component\HttpKernel\Exception\ModelNotFoundException) {
+            return response()->Json([
               'message' => 'Record not found',
-          ], 404);
-          // return response()->view('welcome')->header('Content-Type', 'text/html');
+            ], 404);
         }
-
         return parent::render($request, $e);
     }
 }

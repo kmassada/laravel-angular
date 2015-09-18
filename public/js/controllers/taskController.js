@@ -1,8 +1,8 @@
 
-angular.module('taskCtrl', [])
+angular.module('taskApp')
 
 // inject the Task service into our controller
-.controller('mainController', function($scope, $http, Task) {
+.controller('taskController', function($scope, $http, Task, authInterceptor) {
     $scope.createTask = true;
 
     // object to hold all the data for the new task form
@@ -15,6 +15,7 @@ angular.module('taskCtrl', [])
     // use the function we created in our service
     Task.get()
         .success(function(data) {
+            console.log(data.user);
             $scope.tasks = data.tasks;
             $scope.loading = false;
             $scope.taskTagOptions=data.tags.map(function(tag) {
