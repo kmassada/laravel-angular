@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Hash;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -36,4 +37,9 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    public function setPasswordAttribute($value)
+    {
+      $this->attributes['password'] = Hash::make($value);
+    }
 }
