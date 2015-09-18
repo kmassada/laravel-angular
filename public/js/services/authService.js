@@ -1,5 +1,5 @@
 angular.module('taskApp')
-.factory('Auth', function ($http, $localStorage, url) {
+.factory('Auth', function ($http, $window, url) {
 	function urlBase64Decode(str) {
 		var output = str.replace('-', '+')
 			.replace('_', '/');
@@ -19,7 +19,7 @@ angular.module('taskApp')
 	}
 
 	function getClaimsFromToken() {
-		var token = $localStorage.token;
+		var token = $window.sessionStorage.token;
 		var user = {};
 		if (typeof token !== 'undefined') {
 			var encoded = token.split('.')[1];
@@ -34,18 +34,22 @@ angular.module('taskApp')
 		register: function (data, success, error) {
 			$http.post(url.BASE_API + '/api/register', data)
 				.success(success)
-				.error(error);
+				.error(function (error) {
+					// Erase the token if the user fails to log in
+					delete $window.sessionStorage.token;
+				  });
 		},
 		signin: function (data, success, error) {
 			$http.post(url.BASE_API + '/api/signin', data)
-				.success(function(data) {
-					console.log(data);
-				})
-				.error(error);
+				.success(success)
+				.error(function (error) {
+					// Erase the token if the user fails to log in
+					delete $window.sessionStorage.token;
+				  });
 		},
 		logout: function (success) {
 			tokenClaims = {};
-			delete $localStorage.token;
+			delete $window.sessionStorage.token;
 			success();
 		},
 		getTokenClaims: function () {

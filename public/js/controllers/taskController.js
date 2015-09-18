@@ -2,7 +2,7 @@
 angular.module('taskApp')
 
 // inject the Task service into our controller
-.controller('taskController', function($scope, $http, Task) {
+.controller('taskController', function($scope, $http, Task, authInterceptor) {
     $scope.createTask = true;
 
     // object to hold all the data for the new task form

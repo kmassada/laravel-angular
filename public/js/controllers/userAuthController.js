@@ -1,8 +1,9 @@
 angular.module('taskApp')
-.controller('UserAuthController', function ($rootScope, $scope, $location, $localStorage, Auth) {
+.controller('UserAuthController', function ($rootScope, $scope, $location, $window, Auth) {
 		function successAuth(res) {
-			$localStorage.token = res.token;
-			window.location = "/";
+			console.log(res);
+			$window.sessionStorage.token = res.token;
+			window.location = "/home";
 		}
 
 		$scope.signin = function () {
@@ -11,7 +12,10 @@ angular.module('taskApp')
 				password: $scope.password
 			};
 
-			Auth.signin(formData, successAuth, function () {
+			Auth.signin(formData, function (res) {
+				$window.sessionStorage.token = res.token;
+				window.location = "/#/tasks";
+			}, function () {
 				$rootScope.error = 'Invalid credentials.';
 			});
 		};
@@ -30,11 +34,11 @@ angular.module('taskApp')
 		};
 
 		$scope.logout = function () {
-			Auth.logout(function () {
+			sessionStorage.logout(function () {
 				window.location = "/";
 			});
 		};
-		$scope.token = $localStorage.token;
+		$scope.token = $window.sessionStorage.token;
 		$scope.tokenClaims = Auth.getTokenClaims();
     }
 );

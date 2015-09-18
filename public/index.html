@@ -51,7 +51,11 @@
     </div>
   </nav>
 
-
+  <div class="alert alert-danger" role="alert" ng-if=error>
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span class="sr-only">Error:</span>
+    {{error}}
+  </div>
 
     <!-- THIS IS WHERE WE WILL INJECT OUR CONTENT ============================== -->
     <div ui-view></div>
@@ -64,9 +68,8 @@
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
   <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-  <script src="bower_components/ngstorage/ngStorage.min.js"></script>
   <script src="js/app.js"></script>
-  <script src="js/providers/httpProvider.js"></script>
+  <script src="js/providers/authInterceptor.js"></script>
   <script src="js/services/taskService.js"></script>
   <script src="js/services/authService.js"></script>
   <script src="js/controllers/userAuthController.js"></script>

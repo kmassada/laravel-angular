@@ -4,7 +4,6 @@
 angular.module('taskApp', [
   'ui.router',
   'ui.bootstrap',
-  'ngStorage',
   'angular-loading-bar',
 ])
 .constant('url', {
@@ -12,10 +11,12 @@ angular.module('taskApp', [
    BASE_API: 'http://laravel5-ng.dev/v1'
 })
 
-.config(function($stateProvider, $urlRouterProvider, cfpLoadingBarProvider) {
+.config(function($stateProvider, $httpProvider, $urlRouterProvider, cfpLoadingBarProvider) {
 
     cfpLoadingBarProvider.includeBar = true;
     cfpLoadingBarProvider.includeSpinner = false;
+
+    $httpProvider.interceptors.push('authInterceptor');
 
     $urlRouterProvider.otherwise('/home');
 

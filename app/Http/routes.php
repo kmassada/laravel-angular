@@ -16,21 +16,10 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'v1/api', 'middleware' => 'cors'], function(){
-  Route::resource('tasks', 'TaskController');
+  Route::group(['middleware' => 'jwt.auth'], function(){
+    Route::resource('tasks', 'TaskController');
+    Route::get('/user',  ['uses' => 'UserAuthController@getAuthenticatedUser', 'as' => 'user.get.auth']);
+  });
   Route::post('/register',  ['uses' => 'UserAuthController@register', 'as' => 'user.register']);
   Route::post('/signin',  ['uses' => 'UserAuthController@signin', 'as' => 'user.signin']);
 });
-Route::post('/user',  ['uses' => 'UserAuthController@getAuthenticatedUser', 'as' => 'user.get.auth']);
-Route::get('/restricted', ['before' => 'jwt.auth',  'uses' => 'UserAuthController@location', 'as' => 'home.location']);
-
-// Route::group(['domain' => 'api.jwt.dev', 'prefix' => 'v1'], function () {
-//    Route::get('/restricted', function () {
-//        try {
-//            App\JWTAuth::parseToken()->toUser();
-//        } catch (Exception $e) {
-//            return response()->json(['error' => $e->getMessage()], HttpResponse::HTTP_UNAUTHORIZED);
-//        }
-//
-//        return ['data' => 'This has come from a dedicated API subdomain with restricted access.'];
-//    });
-// });

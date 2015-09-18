@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\JWTAuth;
 use App\Task;
 use App\Tag;
 use App\Priority;
@@ -13,6 +15,14 @@ use App\Http\Controllers\Controller;
 
 class TaskController extends Controller
 {
+
+  protected $auth;
+
+      public function __construct(JWTAuth $auth)
+      {
+        $this->auth = $auth;
+      }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,6 +30,26 @@ class TaskController extends Controller
      */
     public function index()
     {
+      try {
+
+          if (! $user = $this->auth->parseToken()->authenticate()) {
+              return response()->json(['user_not_found'], 404);
+          }
+
+      } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+
+          return response()->json(['token_expired'], $e->getStatusCode());
+
+      } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+
+          return response()->json(['token_invalid'], $e->getStatusCode());
+
+      } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+
+          return response()->json(['token_absent'], $e->getStatusCode());
+
+      }
+      $data['user']=$user;
       $data['tasks']=Task::with('priority','tags')->get();
       $data['priorities']=Priority::all();
       $data['tags']=Tag::all();
