@@ -18,8 +18,9 @@ Route::get('/', function () {
 Route::group(['prefix' => 'v1/api', 'middleware' => 'cors'], function(){
   Route::group(['middleware' => 'jwt.auth'], function(){
     Route::resource('tasks', 'TaskController');
-    Route::get('/user',  ['uses' => 'UserAuthController@getAuthenticatedUser', 'as' => 'user.get.auth']);
+    Route::get('/user/me',  ['uses' => 'UserAuthController@getAuthenticatedUser', 'as' => 'user.get.auth']);
   });
   Route::post('/register',  ['uses' => 'UserAuthController@register', 'as' => 'user.register']);
   Route::post('/signin',  ['uses' => 'UserAuthController@signin', 'as' => 'user.signin']);
+  Route::post('/logout',  ['uses' => 'UserAuthController@logout', 'as' => 'user.logout']);
 });

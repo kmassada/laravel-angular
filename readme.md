@@ -32,74 +32,35 @@ The [Full App](https://github.com/kmassada/laravel-angular/tree/laravel-angular-
 
 [Our Full Laravel/Angular CRUD App](https://github.com/kmassada/laravel-angular/tree/laravel-angular-1.3) is now capable of creating and editing a Task (Model), with schema variables that have a one to many and many to many structure
 
-We now want to open for consideration, the user to our app.
+[Our Full Laravel/Angular CRUD App with user authentication and ownership](https://github.com/kmassada/laravel-angular/tree/laravel-angular-1.4) is now capable of creating and editing a Task (Model), assigned to a specific user.
 
-#### prepare laravel for authentication
+We perform a lot of cleanup.
 
-- create migration and tables for user,
-- establish the relationship between user and task, `User::tasks -- hasMany()`, `Task::user -- belongsTo()`
-- edit `create_task_migration` to include `user_id`
-- create helper `Task::scopeOwn($query)` so user we can search quickly for user's tasks
-- set a `TaskRequest::authorize()` so user can only see, edit or delete his / her tasks
-- create helper `User::setPasswordAttribute` so that user's password gets hashed on save. just in case I forget to
-- create `UserRequest` so we can validate a User signin request at all times
+- alerts
+First we create an alertService.js file, `showAlert: function (type, title, message, timeout)` to flash error messages based on timeout length.
+inside `index.html` we create bootstrap class to handle this `class="alert alert-{{alert.type}} " ng-show="alert.show"`
 
-#### JWT.
+- view cleanup
+We add `ng-cloak` to elements that we do not want user to view on reload. such as the alert div or `<ul class="nav navbar-nav navbar-right" ng-if="userLoggedIn()" ng-cloak>`
 
-the background is quite simple, imagine you authenticate a user vs your api, to verify he/she is a user,
-password comes in perhaps encrypted, you verify user, now what? you redirect the user back to a resource?
-How do you keep the auth procedure secure? How do you track user. Regardless of what solution you come with,
+- rootScope
+we learn also about proper use of `$rootScope`. On the Nav Menu, we had [Log In|Register] vs [Log out|Restricted] these items are shown based on $rootScope.userLoggedIn() which used to be $scope.userLoggedIn(), i've been stingy with using rootScope but fits well this case.
 
-we talking CORS, JWT, Cookies or Session.
+- ui-router
+we learned about ui router states in this portion. using `$state.go('state-name')` to navigate instead of `window.location`
+- form Validation
+we created a custom directive to handle ng-model, also so that we could do error validation in the `link:` function for directives. this process has taught us quite a deal about $parent.scope, we [had problems binding ng-scope](http://stackoverflow.com/questions/32740565/angular-directive-with-ng-model-not-binding) but thankfully we learned and now have a solution [we've implemented](http://plnkr.co/edit/lpAWQm?p=info)
 
-this is an excellent guide that put me in the right direction: [Cookies vs Tokens. Getting auth right with Angular.JS](https://auth0.com/blog/2014/01/07/angularjs-authentication-with-cookies-vs-token/)
+- security
+ng-cloak is great but, let's protect non Auth routes, this we achieve with `$rootScope.run()`.
+as an extension to ui router, we also [learn to protect our routes](http://stackoverflow.com/questions/25872219/confusing-locationchangesuccess-and-statechangestart) by taking advantage of `$locationChangeSuccess`, preventing state to be loaded before user is confirmed to be authenticated
 
-here's our workflow
+- bootstrap - ui
+we remove ui-bootstrap, we originally thought bootstrap ui would be a great idea, but after following a post on performance, we noticed, it replaces elements, that is an extra call. It could potentially slow us down.
 
-![Work Flow](https://dl.dropboxusercontent.com/u/1567633/github/Screenshot_2015-09-18_16.21.27.png)
-
-for laravel we do the following
-
-- Unlock Cross Origin Requests Using CORS
-Before any request is even made to our api, we need cors to not worry about cross domain Requests
-
-- User JWT for authenticating
-we will use JWT for login and logout, it will also specify validity duration of token
-we will use JWT to create the Token, retrun it to the view, and fetch the token, verify validity, serve Requests
-
-[tymondesigns/jwt-auth](https://github.com/tymondesigns/jwt-auth)
-[barryvdh/laravel-cors](https://github.com/barryvdh/laravel-cors)
-
-- prepare packages jwt-auth and cors
-follow both guides for jwt-auth from their git pages closely,
-the secret to publish their config for both is to `php artisan vendor:publish --provider="PROVIDER?PATH"`
-also if you get errors about resources not found, make sure you using `use JWTAuth;` or whatever package is named.
-In .env I also create a variable called JWT_SECRET, that's a salt for JWT, same as one specified in the `config/jwt.php`
-however I will change it, as soon as I upload this.  
-also add error handlers like required to return JSON on invalid requests
-
-- create routes, and controllers for login, logout
-we create routes. Notice `jwt.auth` middleware, our tasks are not available unless you authenticate using jwt.
-also note `signin` and `register` go hand in hand to the same controller. Everything under `v1/api` route
-
-```php
-Route::group(['prefix' => 'v1/api', 'middleware' => 'cors'], function(){
-  Route::group(['middleware' => 'jwt.auth'], function(){
-    Route::resource('tasks', 'TaskController');
-    Route::get('/user',  ['uses' => 'UserAuthController@getAuthenticatedUser', 'as' => 'user.get.auth']);
-  });
-  Route::post('/register',  ['uses' => 'UserAuthController@register', 'as' => 'user.register']);
-  Route::post('/signin',  ['uses' => 'UserAuthController@signin', 'as' => 'user.signin']);
-});
-```
-
-#### Angular Side
-
-- create login/register page
-- set routes to go to login/register
-- write service to request authentication
-- once authenticated, we use Interceptors to bind bearer in the headers
-- in the login/register controller, use authenticator service to submit api requests 
+Todo:
+- finish error validation, implementing client side validation, as well as displaying server errors
+- fix breaking reload on page 
 
 
 ### License
@@ -124,3 +85,5 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 - ANGULAR RESOURCES
 [Interceptors in angularjs](http://www.webdeveasy.com/interceptors-in-angularjs-and-useful-examples/)
+[Angular UI Router](https://github.com/angular-ui/ui-router/wiki/Quick-Reference)
+[John Papa Style Guide](https://github.com/johnpapa/angular-styleguide)

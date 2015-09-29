@@ -15,7 +15,6 @@ angular.module('taskApp')
     // use the function we created in our service
     Task.get()
         .success(function(data) {
-            console.log(data.user);
             $scope.tasks = data.tasks;
             $scope.loading = false;
             $scope.taskTagOptions=data.tags.map(function(tag) {
@@ -30,6 +29,11 @@ angular.module('taskApp')
     $scope.addOrEditTask = function() {
         $scope.loading = true;
 
+        if ($scope.taskForm.$valid) {
+            alert('Form saved');
+        } else {
+          alert("There are invalid fields");
+        }
         if ($scope.currentTask) {
             $scope.taskData.id=$scope.currentTask.id;
 

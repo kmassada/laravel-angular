@@ -45,9 +45,31 @@ class UserAuthController extends Controller
                return response()->json(['error' => 'could_not_create_token'], 500);
            }
 
+
            // all good so return the token
            return response()->json(compact('token'));
         }
+     }
+
+     /**
+      * [logout description]
+      * @param  Request $request [description]
+      * @return [type]           [description]
+      */
+     public function logout(Request $request)
+     {
+         App\Auth::logout();
+     }
+
+     /**
+      * [logout description]
+      * @param  Request $request [description]
+      * @return [type]           [description]
+      */
+     public function getAuthenticatedUser()
+     {
+         $user=$this->auth->parseToken()->toUser();
+         return response()->json(compact('user'));
      }
 
      /**
