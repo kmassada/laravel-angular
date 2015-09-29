@@ -1,6 +1,6 @@
 angular.module('taskApp')
 
-.factory('authInterceptor', function ($rootScope, $q, $window) {
+.factory('authInterceptor', function ($rootScope, $q, $window, Alert) {
 	return {
 		request: function (config) {
 			config.headers = config.headers || {};
@@ -11,8 +11,9 @@ angular.module('taskApp')
 			return config;
 		},
 		responseError: function (rejection) {
-			if (rejection.status === 401) {
-				// handle the case where the user is not authenticated
+			if (rejection.status === 401 || rejection.status === 403 || rejection.status === 400) {
+				 Alert.showAlert('danger', 'Hmmm....', 'you need to be logged in to view this page!');
+				 window.location = "/#/login";
 			}
 			return $q.reject(rejection);
 		}

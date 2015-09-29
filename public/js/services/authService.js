@@ -1,5 +1,6 @@
 angular.module('taskApp')
 .factory('Auth', function ($http, $window, url) {
+
 	function urlBase64Decode(str) {
 		var output = str.replace('-', '+')
 			.replace('_', '/');
@@ -47,13 +48,23 @@ angular.module('taskApp')
 					delete $window.sessionStorage.token;
 				  });
 		},
+		me: function () {
+			return $http.get(url.BASE_API + '/api/user/me');
+		},
 		logout: function (success) {
+			$http.post(url.BASE_API + '/api/logout')
+				.success(success)
+				.error(function (error) {
+					// Erase the token if the user fails to log in
+					delete $window.sessionStorage.token;
+				  });
+
 			tokenClaims = {};
 			delete $window.sessionStorage.token;
 			success();
 		},
 		getTokenClaims: function () {
 			return tokenClaims;
-		}
+		},
 	};
 });
