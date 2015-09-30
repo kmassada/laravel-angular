@@ -11,8 +11,7 @@ function tokenStorage($q, $window, $rootScope) {
 			}
 		});
 
-	var service;
-	service = {
+	var service = {
 		setData: function (val) {
 			$window.localStorage && $window.localStorage.setItem('token', val);
 			return this;

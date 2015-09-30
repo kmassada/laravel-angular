@@ -1,24 +1,23 @@
-<form ng-submit="addOrEditTask(taskForm)" name='taskForm' novalidate class="form-horizontal"> <!-- ng-submit will disable the default form action and use our function -->
+<form class="form-horizontal" name='taskCtrl.taskForm' ng-submit="taskCtrl.addOrEditTask(taskForm)" novalidate>
+    <!-- ng-submit will disable the default form action and use our function -->
 
     <!-- Title -->
-    <task-form-field element='input' live='false' field="taskForm.title" ng-model="taskData.title" field-placeholder="Title" required='true'></task-form-field>
+    <task-form-field element='input' field-placeholder="Title" field="taskCtrl.taskForm.title" live='false' ng-model="taskCtrl.taskData.title" required='true'></task-form-field>
 
     <!-- Notes -->
-    <task-form-field element='textarea' live='false' field="taskForm.notes" ng-model="taskData.notes" field-placeholder="please add task details" required='false'>
-    </task-form-field>
+    <task-form-field element='textarea' field-placeholder="please add task details" field="taskCtrl.taskForm.notes" live='false' ng-model="taskCtrl.taskData.notes" required='false'></task-form-field>
 
     <!-- Priority -->
-    <task-form-field element='select' live='false' field="taskForm.priority_id" ng-model="taskData.priority_id" options="taskPriorityOptions">
-    </task-form-field>
+    <task-form-field element='select' field="taskCtrl.taskForm.priority_id" live='false' ng-model="taskCtrl.taskData.priority_id" options="taskCtrl.taskPriorityOptions"></task-form-field>
 
     <!-- Tags -->
-    <task-form-field element='multipleselect' field="taskForm.multipleSelect"  live='false' ng-model="taskData.tag_list"  options="taskTagOptions">
-    </task-form-field>
+    <task-form-field element='multipleselect' field="taskCtrl.taskForm.multipleSelect" live='false' ng-model="taskCtrl.taskData.tag_list" options="taskCtrl.taskTagOptions"></task-form-field>
 
-    <tt>TaskData = {{taskData}}</tt><br/>
+    <tt>TaskData =
+        {{taskCtrl.taskData}}</tt><br/>
 
     <!-- SUBMIT BUTTON -->
     <div class="form-group text-right">
-        <button type="submit" class="btn btn-primary btn-lg">{{ taskData.title ? 'Update' : 'Save' }}</button>
+        <button class="btn btn-primary btn-lg" type="submit">{{ taskCtrl.taskData.title ? 'Update' : 'Save' }}</button>
     </div>
 </form>
