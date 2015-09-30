@@ -1,5 +1,5 @@
 angular.module('taskApp')
-.controller('UserAuthController', function ($rootScope, $scope, $state, $location, $window, Auth) {
+.controller('UserAuthController', function ($rootScope, $scope, $state, $location, $window, $timeout, Auth, tokenStorage) {
 
 		$scope.signin = function () {
 			var formData = {
@@ -7,28 +7,15 @@ angular.module('taskApp')
 				password: $scope.password
 			};
 
-			Auth.signin(formData, function (res) {
-				$window.sessionStorage.token = res.token;
-				$scope.loggedIn = true;
-			}, function () {
-				$rootScope.error = 'Invalid credentials.';
-			}).then(function(){
-				verifyAuth();
-				$state.go('tasks');
-			});
+			Auth.signin(formData)
+				.then(function (res) {
+					console.log(res.token);
+					tokenStorage.setData(res.token);
+					getMe();
+					$state.go('tasks');
+				});
 
-		};
-
-		verifyAuth();
-
-		function verifyAuth() {
-			console.log(Object.keys(Auth.getTokenClaims()).length);
-			if (Object.keys(Auth.getTokenClaims()).length !==0) {
-				getMe();
-				console.log($rootScope.user);
-	      		$scope.loggedIn = true;
-		    }
-		}
+			};
 
 		$scope.register = function () {
 			var formData = {
@@ -41,18 +28,19 @@ angular.module('taskApp')
 			Auth.register(formData, function (res) {
 				$state.go('home');
 			}, function () {
-				$rootScope.error = 'Failed to signup';
+				Alert.showAlert('danger', 'Signup', 'Failed to signup');
 			});
 		};
 
 		$scope.logout = function () {
+			console.log("loggging out");
 			Auth.logout(function (res) {
 				$rootScope.user=null;
 				$state.go('home');
 			});
 		};
 		$rootScope.userLoggedIn= function () {
-			if ($rootScope.user && $scope.loggedIn)
+			if ($rootScope.user)
 				return true;
 			else
 				return false;
@@ -67,7 +55,5 @@ angular.module('taskApp')
 				$rootScope.user=data.user;
 			});
 		}
-		// $rootScope.token = $window.sessionStorage.token;
-		// $scope.tokenClaims = Auth.getTokenClaims();
     }
 );

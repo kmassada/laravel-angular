@@ -50,4 +50,11 @@ class User extends Model implements AuthenticatableContract,
     public function role() {
       return $this->belongsTo('\App\Role');
     }
+    /**
+     * return todos
+     * @return object Todo
+     */
+    public function tasks() {
+      return $this->hasMany('App\Task');
+    }
 }

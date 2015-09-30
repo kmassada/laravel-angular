@@ -2,7 +2,7 @@
 angular.module('taskApp')
 
 // inject the Task service into our controller
-.controller('taskController', function($scope, $http, Task, authInterceptor) {
+.controller('taskController', function($scope, $http, Task, authInterceptor, Alert) {
     $scope.createTask = true;
 
     // object to hold all the data for the new task form
@@ -26,14 +26,13 @@ angular.module('taskApp')
         });
 
     // function to handle submitting the form
-    $scope.addOrEditTask = function() {
+    $scope.addOrEditTask = function(form) {
         $scope.loading = true;
-
-        if ($scope.taskForm.$valid) {
-            alert('Form saved');
-        } else {
-          alert("There are invalid fields");
+        if (form.$invalid) {
+            alert('invalid');
+            return;
         }
+
         if ($scope.currentTask) {
             $scope.taskData.id=$scope.currentTask.id;
 
@@ -43,15 +42,15 @@ angular.module('taskApp')
                 .success(function(data) {
 
                     // if successful, we'll need to refresh the task list
-                    Task.get()
-                        .success(function(getData) {
-                            $scope.tasks = getData;
-                            $scope.loading = false;
-                        });
+                    loadTasks(data);
+                    refreshForm(form);
 
                 })
                 .error(function(data) {
-                    console.log(data);
+                    for (var key in data) {
+                    Alert.showAlert('danger', key, data[key]);
+                    console.log(data[key]);
+                    }
                 });
 
         } else {
@@ -61,15 +60,14 @@ angular.module('taskApp')
             .success(function(data) {
 
                 // if successful, we'll need to refresh the task list
-                Task.get()
-                    .success(function(getData) {
-                        $scope.tasks = getData;
-                        $scope.loading = false;
-                    });
-
+                loadTasks(data);
+                refreshForm(form);
             })
             .error(function(data) {
-                console.log(data);
+                for (var key in data) {
+                Alert.showAlert('danger', key, data[key]);
+                console.log(data[key]);
+                }
             });
         }
 
@@ -84,12 +82,7 @@ angular.module('taskApp')
             .success(function(data) {
 
                 // if successful, we'll need to refresh the task list
-                Task.get()
-                    .success(function(getData) {
-                        $scope.tasks = getData;
-                        $scope.loading = false;
-                    });
-
+                loadTasks(data);
             });
     };
 
@@ -108,8 +101,20 @@ angular.module('taskApp')
                 $scope.taskData.notes=$scope.currentTask.notes;
                 $scope.taskData.priority_id=$scope.currentTask.priority_id;
                 $scope.taskData.tag_list=$scope.currentTask.tags.map(function(tag) {
-                    return tag.id;
+                return tag.id;
                 });
             });
     };
+    function refreshForm(form) {
+        $scope.taskData = {};
+        form.$setPristine();
+    }
+    function loadTasks(data) {
+        Task.get()
+            .success(function(data) {
+                $scope.tasks = data.tasks;
+                $scope.loading = false;
+            });
+
+    }
 });

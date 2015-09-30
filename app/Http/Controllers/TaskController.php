@@ -109,7 +109,7 @@ class TaskController extends Controller
      * @return task               created task Object
      */
     private function createTask(TaskRequest $request) {
-      $task=Task::create($request->all());
+      $task=Auth::user()->tasks()->create($request->all());
       $this->syncTags($task, $request->input('tag_list'));
 
       return $task;

@@ -58,9 +58,18 @@ as an extension to ui router, we also [learn to protect our routes](http://stack
 - bootstrap - ui
 we remove ui-bootstrap, we originally thought bootstrap ui would be a great idea, but after following a post on performance, we noticed, it replaces elements, that is an extra call. It could potentially slow us down.
 
+- code cleanup
+I've been sharing this code to more and more people, and have noticed how different my angular coding style is, it seems to make more sense and appear clearer when I use [John Papa's style guide](https://github.com/johnpapa/angular-styleguide)
+
+- $q.
+while making requests like login, then fetching task, I've noticed when a promise is being return, it not only adds clarity to the workflow, but speeds up and improve the experience on the frontend, where I can generate items and wait for them to be resolved. [Angular's $q guide](https://docs.angularjs.org/api/ng/service/$q) isn't as thorough but it seems like it's been around for a while. this [networking centric post](http://www.peterbe.com/plog/angularjs-$q-notify-resolve-local-get-proxy) on using promises to retrieve resources help a lot. [this guide was also very helpful](http://www.webdeveasy.com/javascript-promises-and-angularjs-q-service/) his approach of $q is to use it for loading files, geolocation, and checking for duplicate username.
+
+- storing token to localStorage
+I came across a dilemma, we were protecting the routes but on login, we could not redirect to a tasks state. $window.sessionStorage was not getting stored fast enough, we've surely switched to $window.localStorage, and even wrote a service for storing tokens, [inspired by this developer](http://www.undefinednull.com/2014/02/25/angularjs-real-time-model-persistence-using-local-storage/), but the question persist, we've [discovered that using localStorage](http://time2hack.com/2014/12/browser-storage-and-angularjs.html), we can monitor when an element gets added to the storage and '$rootScope.apply()' through our application. 
+
 Todo:
 - finish error validation, implementing client side validation, as well as displaying server errors
-- fix breaking reload on page 
+- fix breaking reload on page
 
 
 ### License
@@ -70,20 +79,21 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 ### Credits LongList
 
 - AUTH
-[tymondesigns/jwt-auth](https://github.com/tymondesigns/jwt-auth)
-[barryvdh/laravel-cors](https://github.com/barryvdh/laravel-cors)
-[Cookies vs Tokens. Getting auth right with Angular.JS](https://auth0.com/blog/2014/01/07/angularjs-authentication-with-cookies-vs-token/)
-[AUTH0 starter NodeJS/Angular AUTH app](https://github.com/auth0/angular-token-auth)
-[Cookie free auth with jwt](http://www.toptal.com/web/cookie-free-authentication-with-json-web-tokens-an-example-in-laravel-and-angularjs)
-[JWT Debugger](http://jwt.io)
+  + [tymondesigns/jwt-auth](https://github.com/tymondesigns/jwt-auth)
+  + [barryvdh/laravel-cors](https://github.com/barryvdh/laravel-cors)
+  + [Cookies vs Tokens. Getting auth right with Angular.JS](https://auth0.com/blog/2014/01/07/angularjs-authentication-with-cookies-vs-token/)
+  + [AUTH0 starter NodeJS/Angular AUTH app](https://github.com/auth0/angular-token-auth)
+  + [Cookie free auth with jwt](http://www.toptal.com/web/cookie-free-authentication-with-json-web-tokens-an-example-in-laravel-and-angularjs)
+  + [JWT Debugger](http://jwt.io)
 
 - DEV HELPERS
-[fzaninotto/Faker](https://github.com/fzaninotto/Faker)
-[laracasts/Laravel-5-Generators-Extended](https://github.com/laracasts/Laravel-5-Generators-Extended)
+  + [fzaninotto/Faker](https://github.com/fzaninotto/Faker)
+  + [laracasts/Laravel-5-Generators-Extended](https://github.com/laracasts/Laravel-5-Generators-Extended)
+  + **irc**: Spot__, epimeth
 
 - LARAVEL RESOURCES
 
 - ANGULAR RESOURCES
-[Interceptors in angularjs](http://www.webdeveasy.com/interceptors-in-angularjs-and-useful-examples/)
-[Angular UI Router](https://github.com/angular-ui/ui-router/wiki/Quick-Reference)
-[John Papa Style Guide](https://github.com/johnpapa/angular-styleguide)
+  + [Interceptors in angularjs](http://www.webdeveasy.com/interceptors-in-angularjs-and-useful-examples/)
+  + [Angular UI Router](https://github.com/angular-ui/ui-router/wiki/Quick-Reference)
+  + [John Papa Style Guide](https://github.com/johnpapa/angular-styleguide)
