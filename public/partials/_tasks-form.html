@@ -1,4 +1,4 @@
-<form ng-submit="addOrEditTask()" name='taskForm' novalidate class="form-horizontal"> <!-- ng-submit will disable the default form action and use our function -->
+<form ng-submit="addOrEditTask(taskForm)" name='taskForm' novalidate class="form-horizontal"> <!-- ng-submit will disable the default form action and use our function -->
 
     <!-- Title -->
     <task-form-field element='input' live='false' field="taskForm.title" ng-model="taskData.title" field-placeholder="Title" required='true'></task-form-field>

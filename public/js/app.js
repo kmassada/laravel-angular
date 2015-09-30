@@ -12,19 +12,17 @@ angular.module('taskApp', [
 })
 .run(function ($rootScope, $state, User){
      $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-        // if(fromState && fromState.name ==='login') {
-        //     $state.go(toState, toParams);
-        //     return;
-        // }
         // if already authenticated...
         var isAuthenticated = User.isAuthenticated();
         // any public action is allowed
         var isPublicAction = angular.isObject(toState.data) && toState.data.isPublic === true;
 
         if (isPublicAction || isAuthenticated) {
+            console.log("checking public routes/auth routes");
           return;
         }
         // stop state change
+        console.log("stop route");
         event.preventDefault();
         // async load user
         User
@@ -34,6 +32,8 @@ angular.module('taskApp', [
               if (isAuthenticated) {
                 console.log("fukeri");
                 // let's continue, use is allowed
+                console.log(user.data);
+                $rootScope.user=user.data;
                 $state.go(toState, toParams);
                 return;
               }
@@ -92,6 +92,14 @@ angular.module('taskApp', [
             templateUrl: 'partials/_home-login.html',
             controller: 'UserAuthController',
             data: { isPublic: true },
+        })
+        .state('logout', {
+            url: '/logout',
+            controller: 'UserAuthController',
+            onEnter: function($scope){
+                console.log("logout");
+                $scope.logout;
+            }
         })
 
         .state('register', {

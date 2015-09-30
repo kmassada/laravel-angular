@@ -1,12 +1,12 @@
 angular.module('taskApp')
 
-.factory('authInterceptor', function ($rootScope, $q, $window, Alert) {
+.factory('authInterceptor', function ($rootScope, $q, $window, Alert, tokenStorage) {
 	return {
 		request: function (config) {
 			config.headers = config.headers || {};
-                // console.log(config);
-			if ($window.sessionStorage.token) {
-				config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
+            var token=tokenStorage.getData();
+			if (token) {
+				config.headers.Authorization = 'Bearer ' + token;
 			}
 			return config;
 		},
