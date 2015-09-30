@@ -1,59 +1,64 @@
 angular.module('taskApp')
-.controller('UserAuthController', function ($rootScope, $scope, $state, $location, $window, $timeout, Auth, tokenStorage) {
+	.controller('UserAuthController', UserAuthController);
 
-		$scope.signin = function () {
-			var formData = {
-				email: $scope.email,
-				password: $scope.password
-			};
+UserAuthController.$inject = ['$rootScope', '$state', 'Auth', 'tokenStorage'];
 
-			Auth.signin(formData)
-				.then(function (res) {
-					console.log(res.token);
-					tokenStorage.setData(res.token);
-					getMe();
-					$state.go('tasks');
-				});
+function UserAuthController($rootScope, $state, Auth, tokenStorage) {
+	var userCtrl = this;
+	userCtrl.signin = signin;
+	userCtrl.register = register;
+	userCtrl.logout = logout;
+	$rootScope.userLoggedIn = userLoggedIn;
 
-			};
+	 function signin() {
+		var formData = {
+			email: userCtrl.email,
+			password: userCtrl.password
+		};
 
-		$scope.register = function () {
-			var formData = {
-				name: $scope.name,
-				email: $scope.email,
-				password: $scope.password,
-				password_confirmation: $scope.password_confirmation
-			};
-
-			Auth.register(formData, function (res) {
-				$state.go('home');
-			}, function () {
-				Alert.showAlert('danger', 'Signup', 'Failed to signup');
+		Auth.signin(formData)
+			.then(function (res) {
+				console.log(res.token);
+				tokenStorage.setData(res.token);
+				getMe();
+				$state.go('tasks');
 			});
+	}
+
+	 function register() {
+		var formData = {
+			name: userCtrl.name,
+			email: userCtrl.email,
+			password: userCtrl.password,
+			password_confirmation: userCtrl.password_confirmation
 		};
 
-		$scope.logout = function () {
-			console.log("loggging out");
-			Auth.logout(function (res) {
-				$rootScope.user=null;
-				$state.go('home');
+		Auth.register(formData, function (res) {
+			$state.go('home');
+		}, function() {
+			Alert.showAlert('danger', 'Signup', 'Failed to signup');
+		});
+	}
+
+	 function logout() {
+		console.log("loggging out");
+		Auth.logout(function (res) {
+			$rootScope.user = null;
+			$state.go('home');
+		});
+	}
+
+	 function userLoggedIn() {
+		if ($rootScope.user)
+			return true;
+		else
+			return false;
+	}
+
+	 function getMe() {
+		Auth.me()
+			.success(function (data) {
+				$rootScope.user = data.user;
 			});
-		};
-		$rootScope.userLoggedIn= function () {
-			if ($rootScope.user)
-				return true;
-			else
-				return false;
-		};
-		$scope.reloadCtrl = function(){
-			console.log('reloading...');
-			$route.reload();
-		};
-		function getMe() {
-			Auth.me()
-			.success(function(data) {
-				$rootScope.user=data.user;
-			});
-		}
-    }
-);
+	}
+}
