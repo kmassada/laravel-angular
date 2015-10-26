@@ -1,11 +1,11 @@
 angular.module('taskApp')
-	.controller('taskController', taskController);
+	.controller('TaskController', TaskController);
 
 // inject the Task service into our controller
-taskController.$inject = ['$http', 'Task', 'Alert'];
+TaskController.$inject = ['$http', 'Task', 'Alert'];
 
 
-function taskController($http, Task, Alert) {
+function TaskController($http, Task, Alert) {
 	var taskCtrl = this;
 
 	// object to hold all the data for the new task form

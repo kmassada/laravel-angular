@@ -65,11 +65,19 @@ I've been sharing this code to more and more people, and have noticed how differ
 while making requests like login, then fetching task, I've noticed when a promise is being return, it not only adds clarity to the workflow, but speeds up and improve the experience on the frontend, where I can generate items and wait for them to be resolved. [Angular's $q guide](https://docs.angularjs.org/api/ng/service/$q) isn't as thorough but it seems like it's been around for a while. this [networking centric post](http://www.peterbe.com/plog/angularjs-$q-notify-resolve-local-get-proxy) on using promises to retrieve resources help a lot. [this guide was also very helpful](http://www.webdeveasy.com/javascript-promises-and-angularjs-q-service/) his approach of $q is to use it for loading files, geolocation, and checking for duplicate username.
 
 - storing token to localStorage
-I came across a dilemma, we were protecting the routes but on login, we could not redirect to a tasks state. $window.sessionStorage was not getting stored fast enough, we've surely switched to $window.localStorage, and even wrote a service for storing tokens, [inspired by this developer](http://www.undefinednull.com/2014/02/25/angularjs-real-time-model-persistence-using-local-storage/), but the question persist, we've [discovered that using localStorage](http://time2hack.com/2014/12/browser-storage-and-angularjs.html), we can monitor when an element gets added to the storage and '$rootScope.apply()' through our application. 
+I came across a dilemma, we were protecting the routes but on login, we could not redirect to a tasks state. $window.sessionStorage was not getting stored fast enough, we've surely switched to $window.localStorage, and even wrote a service for storing tokens, [inspired by this developer](http://www.undefinednull.com/2014/02/25/angularjs-real-time-model-persistence-using-local-storage/), but the question persist, we've [discovered that using localStorage](http://time2hack.com/2014/12/browser-storage-and-angularjs.html), we can monitor when an element gets added to the storage and '$rootScope.apply()' through our application.
 
-Todo:
-- finish error validation, implementing client side validation, as well as displaying server errors
-- fix breaking reload on page
+- Usage of log
+using [$log](https://docs.angularjs.org/api/ng/service/$log) is  clean and convenient way to keep logs tidy.
+
+- Primitives do not `$apply`.
+I've been running into the constant problem of having primitives not able to display, despite setting the value. [I've come across](https://github.com/angular/angular.js/wiki/Understanding-Scopes) it already twice before but this time I paid really paid attention, after User's name will not get set in nav bar.
+
+- `ng-init`
+I've also discovered ng-init as a way to run a function, under a given scope for an element. this has also shown me, how angular loads element, and how important initialization is.
+
+- Others:
+There has been a lot of information unconvered especially trying to tidy the login/logout function in the app. from the `$scope.on` listeners, to the `$scope.watch` to monitor changed variables, but I will address more of them in the next version.
 
 
 ### License
@@ -89,7 +97,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 - DEV HELPERS
   + [fzaninotto/Faker](https://github.com/fzaninotto/Faker)
   + [laracasts/Laravel-5-Generators-Extended](https://github.com/laracasts/Laravel-5-Generators-Extended)
-  + **irc**: Spot__, epimeth
+  + **irc**: Spot__, epimeth, icebox
 
 - LARAVEL RESOURCES
 

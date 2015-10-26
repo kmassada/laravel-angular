@@ -1,16 +1,43 @@
 angular.module('taskApp')
 	.controller('UserAuthController', UserAuthController);
 
-UserAuthController.$inject = ['$rootScope', '$state', 'Auth', 'tokenStorage'];
+UserAuthController.$inject = ['$state', '$q', '$window', '$log', '$scope','$rootScope', 'Auth', 'User', 'appStorage'];
 
-function UserAuthController($rootScope, $state, Auth, tokenStorage) {
+function UserAuthController($state, $q, $window, $log, $scope,$rootScope, Auth, User, appStorage) {
 	var userCtrl = this;
 	userCtrl.signin = signin;
 	userCtrl.register = register;
 	userCtrl.logout = logout;
-	$rootScope.userLoggedIn = userLoggedIn;
+	userCtrl.userLoggedIn = userLoggedIn;
+	$rootScope.isLoggedIn = false;
+
+	// loading variable
+	userCtrl.loading = true;
+
+	function userLoggedIn() {
+		userCtrl.loading = true;
+		var token = appStorage.getData('token');
+		var user = appStorage.getData('user');
+
+		$log.log("[userAuthController]: verify user state");
+		var deferred = $q.defer();
+
+		if(token && user){
+			userCtrl.me = user;
+			$rootScope.isLoggedIn = true;
+
+			$log.info("[userAuthController]: user and token are present");
+			deferred.resolve(true);
+		}else{
+			$rootScope.isLoggedIn = false;
+			deferred.reject(false);
+		}
+		userCtrl.loading = false;
+		return deferred.promise;
+	}
 
 	 function signin() {
+		userCtrl.loading = true;
 		var formData = {
 			email: userCtrl.email,
 			password: userCtrl.password
@@ -18,10 +45,16 @@ function UserAuthController($rootScope, $state, Auth, tokenStorage) {
 
 		Auth.signin(formData)
 			.then(function (res) {
-				console.log(res.token);
-				tokenStorage.setData(res.token);
-				getMe();
-				$state.go('tasks');
+				getMe()
+				.then(function (value) {
+					userLoggedIn()
+					.then(function () {
+						userCtrl.loading = false;
+						$state.go('tasks');
+					});
+				});
+			}, function () {
+				Alert.showAlert('danger', 'Hmmm....', 'you must have entered wrong credentials!');
 			});
 	}
 
@@ -41,24 +74,33 @@ function UserAuthController($rootScope, $state, Auth, tokenStorage) {
 	}
 
 	 function logout() {
-		console.log("loggging out");
-		Auth.logout(function (res) {
-			$rootScope.user = null;
-			$state.go('home');
+		$log.error("loggging out");
+			Auth.logout(function (res) {
+				userCtrl.me = false;
 		});
+		$state.go('home');
+		userLoggedIn();
+	}
+	function getMe() {
+		 userCtrl.loading = true;
+
+		 $log.log("[userAuthController]: retrieve and save to storage current user");
+		 var deferred = $q.defer();
+
+		 User.getAuthObject()
+		 .then(function (user) {
+			 var isAuthenticated = user.isAuthenticated === true;
+			 if (isAuthenticated) {
+				 deferred.resolve(true);
+			 }
+		 }, function () {
+			 deferred.reject(false);
+		 });
+		 return deferred.promise;
 	}
 
-	 function userLoggedIn() {
-		if ($rootScope.user)
-			return true;
-		else
-			return false;
-	}
-
-	 function getMe() {
-		Auth.me()
-			.success(function (data) {
-				$rootScope.user = data.user;
-			});
-	}
+	$scope.$on('user:me', function(event,data) {
+	   $log.log("[userAuthController]: listenner");
+	   userCtrl.me = data.data.name;
+	 });
 }

@@ -1,13 +1,13 @@
 angular.module('taskApp')
 	.factory('authInterceptor', authInterceptor);
 
-authInterceptor.$inject = ['$q', '$window', 'Alert', 'tokenStorage'];
+authInterceptor.$inject = ['$q', '$window', 'Alert', 'appStorage'];
 
-function authInterceptor($q, $window, Alert, tokenStorage) {
+function authInterceptor($q, $window, Alert, appStorage) {
 	var service = {
 		request: function (config) {
 			config.headers = config.headers || {};
-			var token = tokenStorage.getData();
+			var token = appStorage.getData('token');
 			if (token) {
 				config.headers.Authorization = 'Bearer ' + token;
 			}

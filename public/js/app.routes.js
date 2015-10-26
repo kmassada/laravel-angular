@@ -25,14 +25,14 @@ function routes($stateProvider, $urlRouterProvider) {
 
         .state('tasks', {
             url: '/tasks',
-            controller: 'taskController',
+            controller: 'TaskController',
             controllerAs: 'taskCtrl',
             templateUrl: 'partials/_tasks.html',
         })
 
         .state('tasks.edit', {
             url: '/tasks/:id/edit',
-            controller: 'taskController',
+            controller: 'TaskController',
             controllerAs: 'taskCtrl',
             templateUrl: 'partials/_tasks-edit.html',
         })
