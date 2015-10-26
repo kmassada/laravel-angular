@@ -7,24 +7,25 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" ui-sref="home">Laravel/Angular App</a>
+    <a class="navbar-brand" ui-sref="home">Laravel/Angular</a>
   </div>
-  <div class="navbar-collapse collapse" ng-controller="UserAuthController as userCtrl">
+
+  <div class="navbar-collapse collapse" ng-controller="UserAuthController as userCtrl" ng-init="userCtrl.userLoggedIn()">
+    <div ng-show="userCtrl.loading"></div>
+    <div ng-hide="userCtrl.loading" ng-cloak>
     <ul class="nav navbar-nav">
       <li><a ui-sref="home">Home</a></li>
       <li><a ui-sref="tasks">Tasks</a></li>
     </ul>
-    <ul class="nav navbar-nav navbar-right" ng-show="userLoggedIn()">
+    <ul class="nav navbar-nav navbar-right" ng-show="isLoggedIn"  ng-cloak>
       <li><a ui-sref="api.restricted">Restricted area</a></li>
       <li><a ng-click="userCtrl.logout()" href>Logout</a></li>
-      <li ui-sref-active="active" class="item">
-        <a ui-sref="tasks">{{user.email}}</a>
-      </li>
+      <li><a>{{userCtrl.me}}</a></li>
     </ul>
-    <ul class="nav navbar-nav navbar-right" ng-hide="userLoggedIn()">
+    <ul class="nav navbar-nav navbar-right" ng-hide="isLoggedIn"  ng-cloak>
       <li><a ui-sref="login">Login in</a></li>
       <li><a ui-sref="register">Register</a></li>
     </ul>
-
+    <div>
   </div>
 </nav>

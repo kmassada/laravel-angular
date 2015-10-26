@@ -1,9 +1,9 @@
 angular.module('taskApp')
 .factory('Auth', Auth);
 
-Auth.$inject = ['$http', '$q', '$window', 'url', '$timeout'];
+Auth.$inject = ['$http', '$q', '$log', '$window', 'appStorage', 'url', '$timeout'];
 
-function Auth($http, $q, $window, url, $timeout) {
+function Auth($http, $q, $log, $window, appStorage, url, $timeout) {
 
 	var service = {
 		register: function (data, success, error) {
@@ -11,21 +11,23 @@ function Auth($http, $q, $window, url, $timeout) {
 				.success(success)
 				.error(function (error) {
 					// Erase the token if the user fails to log in
-					delete $window.localStorage.token;
+					$window.localStorage.removeItem('token');
 				  });
 		},
 		signin: function (data) {
 			var deferred = $q.defer();
-			console.log("attempt login");
+			$log.log("[authService]: attempt login");
 			$http.post(url.BASE_API + '/api/signin', data)
 				.success(function(data, status, headers, config) {
-					console.log("success on api side");
-					console.log(data);
+					$log.info("[authService]: success on api side");
+					$log.log(data);
+					$log.log("[authService]: setting token");
+					appStorage.setData('token',data.token);
 					deferred.resolve(data);
 				})
 				.error(function (error) {
 					// Erase the token if the user fails to log in
-					delete $window.localStorage.token;
+					$window.localStorage.removeItem('token');
 					deferred.reject();
 				  });
 			return deferred.promise;
@@ -33,15 +35,16 @@ function Auth($http, $q, $window, url, $timeout) {
 		me: function () {
 			return $http.get(url.BASE_API + '/api/user/me');
 		},
-		logout: function (success) {
+		logout: function () {
+			$window.localStorage.removeItem('token');
 			var deferred = $q.defer();
 			$http.post(url.BASE_API + '/api/logout')
 				.then(function(data, status, headers, config) {
 					deferred.resolve();
-				})
-				.error(function (error) {
+				},function (error) {
 					// Erase the token if the user fails to log in
-					delete $window.localStorage.token;
+					$window.localStorage.removeItem('token');
+					delete $window.localStorage;
 					tokenClaims = {};
 					deferred.reject();
 				  });
@@ -80,7 +83,9 @@ function Auth($http, $q, $window, url, $timeout) {
 		if (typeof token !== 'undefined') {
 			var encoded = token.split('.')[1];
 			user = JSON.parse(urlBase64Decode(encoded));
-			deferred.resolve();
+			$log.log("[authService]: token claims");
+			$log.log(user);
+			deferred.resolve(user);
 		}else {
 			deferred.reject();
 		}

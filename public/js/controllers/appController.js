@@ -1,17 +1,9 @@
 angular.module('taskApp')
-	.controller('appController', appController);
+	.controller('AppController', AppController);
 
 // inject the Task service into our controller
-appController.$inject = ['$scope'];
+AppController.$inject = ['$rootScope', 'User'];
 
-function appController($scope) {
-
-	$scope
-		.$on('LOAD', function(){
-			$scope.loading=true;
-		});
-	$scope
-		.$on('UNLOAD', function(){
-			$scope.loading=false;
-		});
+function AppController($rootScope, User) {
+	var appCtrl = this;
 }

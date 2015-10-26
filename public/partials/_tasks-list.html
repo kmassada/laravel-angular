@@ -1,6 +1,6 @@
 <!-- hide these tasks if the loading variable is true -->
 <div class="task" ng-hide="loading" ng-repeat="task in taskCtrl.tasks">
-  
+
     <h3>Task #{{ task.id }}
         <small> {{ task.title }}
             <b ng-repeat="tag in task.tags">{{ tag.name }},</b>

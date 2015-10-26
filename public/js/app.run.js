@@ -1,37 +1,34 @@
 angular.module('taskApp')
 	.run(runBlock);
 
-runBlock.$inject = ['$rootScope', '$state', 'User'];
+runBlock.$inject = ['$rootScope', '$state', '$log', 'appStorage', 'User'];
 
-function runBlock($rootScope, $state, User) {
+function runBlock($rootScope, $state, $log, appStorage, User) {
 	$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-		// if already authenticated...
-		var isAuthenticated = User.isAuthenticated();
 		// any public action is allowed
 		var isPublicAction = angular.isObject(toState.data) && toState.data.isPublic === true;
+		// token
+		var token = appStorage.getData('token');
+		var user = appStorage.getData('user');
 
-		if (isPublicAction || isAuthenticated) {
-			console.log("checking public routes/auth routes");
+		if (isPublicAction || token) {
+			$log.log("[appRun]: checking public routes/auth routes");
 			return;
 		}
 		// stop state change
-		console.log("stop route");
+		$log.warn("[appRun]: stop route");
 		event.preventDefault();
 		// async load user
-		User
-			.getAuthObject()
-			.then(function (user) {
-				var isAuthenticated = user.isAuthenticated === true;
-				if (isAuthenticated) {
-					console.log("fukeri");
-					// let's continue, use is allowed
-					console.log(user.data);
-					$rootScope.user = user.data;
-					$state.go(toState, toParams);
-					return;
-				}
-				// log on / sign in...
-				$state.go("login");
-			});
+		if (token && user) {
+				$log.log("[appRun]: fukeri");
+				// let's continue, use is allowed
+				$state.go(toState, toParams);
+				return;
+		}else{
+			$state.go("login");
+			return;
+		}
+	});
+	$rootScope.$on('$routeChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
 	});
 }
