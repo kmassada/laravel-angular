@@ -1,3 +1,6 @@
+## My project
+[![Build Status](https://travis-ci.org/kmassada/laravel-angular.svg?branch=laravel-angular-1.5)](https://travis-ci.org/kmassada/laravel-angular)
+
 ## Laravel PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)

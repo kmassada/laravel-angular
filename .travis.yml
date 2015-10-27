@@ -1,27 +1,45 @@
-# Required to run your project under the correct environment.
+# Required to run project under the correct environment.
 language: php
 
-# Versions of PHP you want your project run with.
+# Versions of PHP
 php:
-  - 5.4
+  - 5.5.9
   - 5.5
   - 5.6
+  - 7.0
   - hhvm
 
-# Commands to be run before your environment runs.
+# environment variables
+env:
+  global:
+    - setup=basic
+
+# No Sudo
+sudo: false
+
+# Commands
 before_script:
   - composer self-update
-  - composer install --prefer-source --no-interaction --dev
+
+install:
+  - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-source; fi
+  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-stable; fi
+  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable; fi
 
 # Commands you want to run that will verify your build.
-script: phpunit
+script: vendor/bin/phpunit
 
 # allow_failures: Allow this build to fail under the specified environments.
 # fast_finish: If your build fails do not continue trying to build, just stop.
 matrix:
-  allow_failures:
-    - php: 5.6
-    - php: hhvm
+  include:
+    - php: 5.5.9
+      env: setup=lowest
+    - php: 5.5.9
+      env: setup=stable
+  # allow_failures:
+  #   - php: 5.6
+  #   - php: hhvm
   fast_finish: true
 
 # Customize when the notification emails are sent.
