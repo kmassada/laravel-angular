@@ -20,6 +20,8 @@ sudo: false
 # Commands
 before_script:
   - composer self-update
+  - npm install -g bower
+  - bower install
 
 install:
   - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-source; fi
