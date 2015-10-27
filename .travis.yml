@@ -9,14 +9,6 @@ php:
   - 7.0
   - hhvm
 
-# external environment variables
-configs = YAML.load_file('tests/database.yml')
-ActiveRecord::Base.configurations = configs
-
-db_name = ENV['DB'] || 'mysql'
-ActiveRecord::Base.establish_connection(db_name)
-ActiveRecord::Base.default_timezone = :utc
-
 # environment variables
 env:
   global:
@@ -57,7 +49,7 @@ matrix:
   allow_failures:
     - php: 5.6
     - php: hhvm
-    # driver for PostgreSQL currently unsupported by HHVM, requires 3rd party dependency
+  # driver for PostgreSQL currently unsupported by HHVM, requires 3rd party dependency
   exclude:
   - php: hhvm
     env: DB=pgsql
