@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('index','hello');
+  return response()->json(array('success' => true));
 });
 
 Route::group(['prefix' => 'v1/api', 'middleware' => 'cors'], function(){
