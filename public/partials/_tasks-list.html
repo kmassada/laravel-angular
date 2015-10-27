@@ -19,9 +19,11 @@
                                 </div>
                                 <div>
                                     {{ task.notes }}
+                                    <p>
                                     <ul class="pagination">
-                                      <li ng-repeat="tag in task.tags"><b>{{ tag.name }}</b></li>
+                                      <li ng-repeat="tag in task.tags"><b>{{ tag.name }}</b> </li>
                                     </ul>
+                                  </p>
                                 </div>
                                 <div class="mic-info">
                                     <div class="span">
