@@ -1,23 +1,28 @@
-<form class="form-horizontal" name='taskCtrl.taskForm' ng-submit="taskCtrl.addOrEditTask(taskForm)" novalidate>
-    <!-- ng-submit will disable the default form action and use our function -->
+<div class="span">
+          <div class="well span6">
 
-    <!-- Title -->
-    <task-form-field element='input' field-placeholder="Title" field="taskCtrl.taskForm.title" live='false' ng-model="taskCtrl.taskData.title" required='true'></task-form-field>
+                <form  class="form" name='taskCtrl.taskForm' ng-submit="taskCtrl.addOrEditTask(taskForm)" novalidate>
+                  <!-- ng-submit will disable the default form action and use our function -->
 
-    <!-- Notes -->
-    <task-form-field element='textarea' field-placeholder="please add task details" field="taskCtrl.taskForm.notes" live='false' ng-model="taskCtrl.taskData.notes" required='false'></task-form-field>
+                  <!-- Title -->
+                  <task-form-field element='input' field-placeholder="Title" field="taskCtrl.taskForm.title" live='false' ng-model="taskCtrl.taskData.title" required='true'></task-form-field>
 
-    <!-- Priority -->
-    <task-form-field element='select' field="taskCtrl.taskForm.priority_id" live='false' ng-model="taskCtrl.taskData.priority_id" options="taskCtrl.taskPriorityOptions"></task-form-field>
+                  <!-- Notes -->
+                  <task-form-field element='textarea' field-placeholder="please add task details" field="taskCtrl.taskForm.notes" live='false' ng-model="taskCtrl.taskData.notes" required='false'></task-form-field>
 
-    <!-- Tags -->
-    <task-form-field element='multipleselect' field="taskCtrl.taskForm.multipleSelect" live='false' ng-model="taskCtrl.taskData.tag_list" options="taskCtrl.taskTagOptions"></task-form-field>
+                  <!-- Priority -->
+                  <task-form-field element='select' field="taskCtrl.taskForm.priority_id" live='false' ng-model="taskCtrl.taskData.priority_id" options="taskCtrl.taskPriorityOptions"></task-form-field>
 
-    <tt>TaskData =
-        {{taskCtrl.taskData}}</tt><br/>
+                  <!-- Tags -->
+                  <task-form-field element='multipleselect' field="taskCtrl.taskForm.multipleSelect" live='false' ng-model="taskCtrl.taskData.tag_list" options="taskCtrl.taskTagOptions"></task-form-field>
 
-    <!-- SUBMIT BUTTON -->
-    <div class="form-group text-right">
-        <button class="btn btn-primary btn-lg" type="submit">{{ taskCtrl.taskData.title ? 'Update' : 'Save' }}</button>
-    </div>
-</form>
+                  <tt>TaskData =
+                      {{taskCtrl.taskData}}</tt><br/>
+
+                  <!-- SUBMIT BUTTON -->
+                  <div class="form-group text-right">
+                      <button class="btn btn-success btn-primary btn-lg" type="submit">{{ taskCtrl.taskData.title ? 'Update' : 'Save' }}</button>
+                  </div>
+                </form>
+            </div>
+</div>

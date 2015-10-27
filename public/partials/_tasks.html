@@ -1,10 +1,11 @@
-<div  ng-controller="TaskController as taskCtrl" class="container">
-  <div class="col-md-8 col-md-offset-2">
+<div class="container">
+<div  ng-controller="TaskController as taskCtrl" class="panel panel-default col-md-10  col-md-offset-1">
+  <div class="span">
 
 <!-- PAGE TITLE =============================================== -->
 <div class="page-header">
-    <h3>Laravel and Angular Task Application</h3>
-    <h4>Task System | <a href="#/tasks" ng-click="taskCtrl.newTask()">New</a></h4>
+    <h4 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> Task Application
+      | <button class="btn btn-xs btn-success" ng-click="taskCtrl.newTask()" style="align:left">New</a></h4>
 </div>
 
 <!-- NEW TASK FORM =============================================== -->
@@ -12,11 +13,12 @@
 
 <!-- LOADING ICON =============================================== -->
 <!-- show loading icon if the loading variable is set to true -->
-<p class="text-center" ng-show="loading"><span class="fa fa-refresh fa-5x fa-spin"></span></p>
+<p class="text-center" ng-show="taskCtrl.loading"><span class="fa fa-refresh fa-5x fa-spin"></span></p>
 
 <!-- THE TASKS =============================================== -->
 <div ng-include="'partials/_tasks-list.html'"></div>
 
 
+  </div>
 </div>
 </div>
