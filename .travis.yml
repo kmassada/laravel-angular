@@ -9,26 +9,41 @@ php:
   - 7.0
   - hhvm
 
+# external environment variables
+configs = YAML.load_file('tests/database.yml')
+ActiveRecord::Base.configurations = configs
+
+db_name = ENV['DB'] || 'mysql'
+ActiveRecord::Base.establish_connection(db_name)
+ActiveRecord::Base.default_timezone = :utc
+
 # environment variables
 env:
   global:
     - setup=basic
+    - DB=mysql
 
 # No Sudo
 sudo: false
 
-# Commands
-before_script:
+## Commands
+
+before_install:
   - composer self-update
-  - npm install -g bower
-  - bower install
+  - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'DROP DATABASE IF EXISTS laravel5-ng;' -U postgres; fi"
+  - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'create database laravel5-ng;' -U postgres; fi"
+  - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'create database IF NOT EXISTS laravel5-ng;'; fi"
 
 install:
   - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-source; fi
   - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-stable; fi
   - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable; fi
 
-# Commands you want to run that will verify your build.
+before_script:
+  - npm install
+  - npm install -g bower
+  - bower install
+
 script: vendor/bin/phpunit
 
 # allow_failures: Allow this build to fail under the specified environments.
@@ -39,9 +54,13 @@ matrix:
   #     env: setup=lowest
   #   - php: 5.5.9
   #     env: setup=stable
-  # allow_failures:
-  #   - php: 5.6
-  #   - php: hhvm
+  allow_failures:
+    - php: 5.6
+    - php: hhvm
+    # driver for PostgreSQL currently unsupported by HHVM, requires 3rd party dependency
+  exclude:
+  - php: hhvm
+    env: DB=pgsql
   fast_finish: true
 
 # Customize when the notification emails are sent.

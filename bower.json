@@ -16,6 +16,8 @@
     "tests"
   ],
 	"dependencies": {
+		"jquery": "~2.1.4",
+		"bootstrap": "~3.3.5",
 		"angular": "~1.4.5",
 		"angular-bootstrap": "~0.13.4",
 		"angular-loader": "~1.4.5",
@@ -23,12 +25,9 @@
 		"angular-messages": "~1.4.6",
 		"angular-mocks": "~1.4.5",
 		"angular-route": "~1.4.5",
+		"angular-ui-router": "~0.2.15",
+		"bootstrap-social": "~4.10.1",
 		"html5-boilerplate": "~5.2.0"
 	},
-	"devDependencies": {
-		"jquery": "~2.1.4",
-		"bootstrap": "~3.3.5",
-		"angular-ui-router": "~0.2.15",
-		"bootstrap-social": "~4.10.1"
-	}
+	"devDependencies": {}
 }
