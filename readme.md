@@ -1,3 +1,6 @@
+## My project
+[![Build Status](https://travis-ci.org/kmassada/laravel-angular.svg?branch=laravel-angular-1.5)](https://travis-ci.org/kmassada/laravel-angular)
+
 ## Laravel PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
@@ -75,6 +78,8 @@ I've been running into the constant problem of having primitives not able to dis
 
 - `ng-init`
 I've also discovered ng-init as a way to run a function, under a given scope for an element. this has also shown me, how angular loads element, and how important initialization is.
+
+- bootstrap theming edits
 
 - Others:
 There has been a lot of information unconvered especially trying to tidy the login/logout function in the app. from the `$scope.on` listeners, to the `$scope.watch` to monitor changed variables, but I will address more of them in the next version.
