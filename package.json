@@ -15,7 +15,7 @@
 		"grunt-karma": "*",
 		"gulp": "^3.8.8",
 		"http-server": "^0.8.0",
-		"karma": "~0.8",
+		"karma": "^0.13.0",
 		"karma-jasmine": "*",
 		"karma-phantomjs-launcher": "*",
 		"phantomjs": "^1.9.18"
