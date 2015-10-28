@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 gem 'nokogiri'
-gem 'rack',
+gem 'rack'
 gem 'rspec', :require => 'spec'
 
 group :development do
