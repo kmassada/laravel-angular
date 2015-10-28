@@ -53,6 +53,14 @@ logLevel = LOG_INFO;
 // enable / disable watching file and executing tests whenever any file changes
 autoWatch = true;
 
+plugins = [
+          'karma-chrome-launcher',
+          'karma-firefox-launcher',
+          'karma-script-launcher',
+          'karma-jasmine'
+      ];
+
+frameworks = ['jasmine'];
 
 // Start these browsers, currently available:
 // - Chrome
