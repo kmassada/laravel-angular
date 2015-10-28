@@ -6,20 +6,23 @@
 	"main": "index.js",
 	"private": true,
 	"scripts": {
-		"postinstall": "bower install",
-		"prestart": "npm install",
-		"start": "http-server -a localhost -p 8000 -c-1",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS,Firefox"
 	},
 	"author": "Kenneth Massada",
 	"license": "ISC",
 	"devDependencies": {
 		"bower": "^1.5.2",
+		"grunt-karma": "*",
 		"gulp": "^3.8.8",
-		"http-server": "^0.8.0"
+		"http-server": "^0.8.0",
+		"karma": "~0.8",
+		"karma-jasmine": "*",
+		"karma-phantomjs-launcher": "*",
+		"phantomjs": "^1.9.18"
 	},
 	"dependencies": {
-		"laravel-elixir": "^3.0.0",
-		"bootstrap-sass": "^3.0.0"
+		"bootstrap-sass": "^3.0.0",
+		"karma": "^0.8.8",
+		"laravel-elixir": "^3.0.0"
 	}
 }
