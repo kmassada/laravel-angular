@@ -38,7 +38,7 @@ before_script:
   - npm install -g bower phantomjs
   - bower install
   - bundle install
-  - php artisan migrate --seed
+  - php artisan migrate --seed  --no-interaction
 
 script:
   - vendor/bin/phpunit
