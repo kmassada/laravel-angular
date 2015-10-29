@@ -41,7 +41,7 @@ before_script:
   - bundle install
 
 script:
-  - php artisan entrust:migrate --seed  --no-interaction
+  - yes | php artisan migrate --seed
   - vendor/bin/phpunit
   - npm test
   - bundle install
