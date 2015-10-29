@@ -18,13 +18,13 @@ class UsersTableSeeder extends Seeder {
 			User::create([
 				'name' => $faker->name(),
 				'email' => $faker->email(),
-				'password' => 'Find_out_123',
+				'password' => env('SEED_SECRET', 'test_password'),
 			]);
 		}
 		User::create([
 				'name' => 'Kenneth Massada',
 				'email' => 'admin@laravel5-ng.dev',
-				'password' => 'Laravel_A12',
+				'password' => env('SEED_SECRET', 'test_password'),
 			]);
 	}
 

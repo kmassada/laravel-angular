@@ -14,7 +14,7 @@ env:
   global:
     - setup=basic
     - DB=mysql
-  # secure:
+    - secure: ALD4vkzbX63O7ZYsnqyhqLiAJgORVwXDLqlVwJ6celMpJjAqw3vVSUT/EZchd5W1a+exFw8+DdQSQYPi+/EI+x9ynwSzkYtzpA3hWL+IIY2Tfeog3TdZbmzu8EcEkIMGSSM50XRUSCP7hYtQsIGmHaMvMIo2zTYLwXHD76HwRPo9CO0D+Ty8FL8R3KvpFpiKFBPcXAoxF0Z8R4jXuLqUVHRtBJtkp1h8JJ0yHwzlaAo0vvRbEyDIF3jY6mGc2oVYqZ1/pgCuGi5ku4B8kNNkg8ERf2xQVGmfnWpUeG1HHo6HtdPR/uJqfMgn533hAKvVL6kp19GLRCNly7qDBr8hrUQW/cOPGaJXnixXep+0GlgRb/hRdBsZN8sCJeM9IizS0P1WCiCZD7a+dr9wEgtJC3BWxNV9mSJGFPkRMa6JM/ElMofaVilSJyLAGwidJ79gje+ZcudWIQuH6evw5ZeF3KTkldOLzoJJljrm5vdFa/xOexD/jugNj6+00AyBQN0UXbUQcblZp6y+iHMrtZU2ZQKpLb6rx7lMt4xW5kUB9V0YD687T7PPIy1e+vVyoC8nwDjxvw+0HLIqtsmquh5K3u+1mUO1EIR6sruExHT7KCoKefMmnbKj983dxA8UMcpMCtGHS4JsoHJrAth85u6utfWppAe5DqiG9X72j/q1kSY=
 
 # No Sudo
 sudo: false
@@ -35,6 +35,7 @@ install:
 
 before_script:
   - cp .env.test .env
+  - sed -i 's/seed/$SEED_SECURE/g' .env
   - npm install
   - npm install -g bower phantomjs
   - bower install
