@@ -34,13 +34,14 @@ install:
   - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable; fi
 
 before_script:
+  - cp .env.test .env
   - npm install
   - npm install -g bower phantomjs
   - bower install
   - bundle install
-  - php artisan migrate --seed  --no-interaction
 
 script:
+  - php artisan entrust:migrate --seed  --no-interaction
   - vendor/bin/phpunit
   - npm test
   - bundle install
