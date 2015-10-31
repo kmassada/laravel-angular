@@ -6,13 +6,11 @@ php:
   - 5.5.9
   - 5.5
   - 5.6
-  - 7.0
   - hhvm
 
 # environment variables
 env:
   global:
-    - setup=basic
     - DB=mysql
     - secure: ALD4vkzbX63O7ZYsnqyhqLiAJgORVwXDLqlVwJ6celMpJjAqw3vVSUT/EZchd5W1a+exFw8+DdQSQYPi+/EI+x9ynwSzkYtzpA3hWL+IIY2Tfeog3TdZbmzu8EcEkIMGSSM50XRUSCP7hYtQsIGmHaMvMIo2zTYLwXHD76HwRPo9CO0D+Ty8FL8R3KvpFpiKFBPcXAoxF0Z8R4jXuLqUVHRtBJtkp1h8JJ0yHwzlaAo0vvRbEyDIF3jY6mGc2oVYqZ1/pgCuGi5ku4B8kNNkg8ERf2xQVGmfnWpUeG1HHo6HtdPR/uJqfMgn533hAKvVL6kp19GLRCNly7qDBr8hrUQW/cOPGaJXnixXep+0GlgRb/hRdBsZN8sCJeM9IizS0P1WCiCZD7a+dr9wEgtJC3BWxNV9mSJGFPkRMa6JM/ElMofaVilSJyLAGwidJ79gje+ZcudWIQuH6evw5ZeF3KTkldOLzoJJljrm5vdFa/xOexD/jugNj6+00AyBQN0UXbUQcblZp6y+iHMrtZU2ZQKpLb6rx7lMt4xW5kUB9V0YD687T7PPIy1e+vVyoC8nwDjxvw+0HLIqtsmquh5K3u+1mUO1EIR6sruExHT7KCoKefMmnbKj983dxA8UMcpMCtGHS4JsoHJrAth85u6utfWppAe5DqiG9X72j/q1kSY=
 
@@ -29,9 +27,7 @@ before_install:
   - rvm 1.9.3 do gem install net-ssh -v 2.9.2
 
 install:
-  - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-source; fi
-  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-stable; fi
-  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable; fi
+  - travis_retry composer install --no-interaction --prefer-source
 
 before_script:
   - cp .env.test .env
@@ -54,14 +50,7 @@ after_success:
   # - "openssl aes-256-cbc -k $DEPLOY_KEY -in config/enc/deploy_id_rsa_enc_travis -d -a -out config/enc/deploy_id_rsa"
   # - "[[ $TRAVIS_BRANCH = 'master' ]] && bundle exec cap production deploy"
 
-# allow_failures: Allow this build to fail under the specified environments.
-# fast_finish: If your build fails do not continue trying to build, just stop.
 matrix:
-  # include:
-  #   - php: 5.5.9
-  #     env: setup=lowest
-  #   - php: 5.5.9
-  #     env: setup=stable
   allow_failures:
     - php: 5.6
     - php: hhvm
