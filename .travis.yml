@@ -38,7 +38,8 @@ before_script:
   - bundle install
 
 script:
-  - yes | php artisan migrate --seed
+  - yes | php artisan migrate
+  - yes | php artisan migrate:refresh --seed
   - vendor/bin/phpunit
   - npm test
   - bundle install
