@@ -1,27 +1,30 @@
 <div class="span">
           <div class="well span6">
 
-                <form  class="form" name='taskCtrl.taskForm' ng-submit="taskCtrl.addOrEditTask(taskForm)" novalidate>
+                <form  class="form" name='taskCtrl.taskForm' ng-submit="taskCtrl.addOrEditTask(taskCtrl.taskForm)" novalidate>
                   <!-- ng-submit will disable the default form action and use our function -->
 
                   <!-- Title -->
-                  <task-form-field element='input' field-placeholder="Title" field="taskCtrl.taskForm.title" live='false' ng-model="taskCtrl.taskData.title" required='true'></task-form-field>
+                  <task-form-field element='input' field-placeholder="Title" label="title" field="taskCtrl.taskForm.title" live='false' ng-model="taskCtrl.taskData.title" required='true'></task-form-field>
 
                   <!-- Notes -->
-                  <task-form-field element='textarea' field-placeholder="please add task details" field="taskCtrl.taskForm.notes" live='false' ng-model="taskCtrl.taskData.notes" required='false'></task-form-field>
+                  <task-form-field element='textarea' field-placeholder="please add task details" label="notes" field="taskCtrl.taskForm.notes" live='false' ng-model="taskCtrl.taskData.notes" required='false'></task-form-field>
 
                   <!-- Priority -->
-                  <task-form-field element='select' field="taskCtrl.taskForm.priority_id" live='false' ng-model="taskCtrl.taskData.priority_id" options="taskCtrl.taskPriorityOptions"></task-form-field>
+                  <task-form-field element='select' label="priority" field="taskCtrl.taskForm.priority_id" live='false' ng-model="taskCtrl.taskData.priority_id" options="taskCtrl.taskPriorityOptions"></task-form-field>
 
                   <!-- Tags -->
-                  <task-form-field element='multipleselect' field="taskCtrl.taskForm.multipleSelect" live='false' ng-model="taskCtrl.taskData.tag_list" options="taskCtrl.taskTagOptions"></task-form-field>
+                  <task-form-field element='multipleselect' label="tags" field="taskCtrl.taskForm.multipleSelect" live='false' ng-model="taskCtrl.taskData.tag_list" options="taskCtrl.taskTagOptions"></task-form-field>
 
                   <tt>TaskData =
                       {{taskCtrl.taskData}}</tt><br/>
+                      <tt>Form = {{userType}}</tt><br>
+                      <tt>taskCtrl.taskForm.$valid = {{taskCtrl.taskForm.$valid}}</tt><br>
+                      <tt>taskCtrl.taskForm.$error.required = {{!!taskCtrl.taskForm.$error.required}}</tt><br>
 
                   <!-- SUBMIT BUTTON -->
                   <div class="form-group text-right">
-                      <button class="btn btn-success btn-primary btn-lg" type="submit">{{ taskCtrl.taskData.title ? 'Update' : 'Save' }}</button>
+                      <button class="btn btn-success btn-primary btn-lg" type="submit">{{ taskCtrl.currentTask ? 'Update' : 'Save' }}</button>
                   </div>
                 </form>
             </div>

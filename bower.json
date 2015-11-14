@@ -1,13 +1,13 @@
 {
-  "name": "angular.dev",
-  "version": "0.0.0",
-  "authors": [
-    "Kenneth Massada  "
+	"name": "angular.dev",
+	"version": "0.0.0",
+	"authors": [
+    "Kenneth Massada"
   ],
-  "description": "A starter project for AngularJS",
-  "repository": "https://github.com/kmassada/angular-app.git",
-  "license": "MIT",
-  "ignore": [
+	"description": "A starter project for AngularJS",
+	"repository": "https://github.com/kmassada/angular-app.git",
+	"license": "MIT",
+	"ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
@@ -15,21 +15,21 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-    "jquery": "~2.1.4",
-    "bootstrap": "~3.3.5",
-    "angular": "~1.4.5",
-    "angular-bootstrap": "~0.13.4",
-    "angular-loader": "~1.4.5",
-    "angular-loading-bar": "~0.8.0",
-    "angular-messages": "~1.4.6",
-    "angular-mocks": "~1.4.5",
-    "angular-route": "~1.4.5",
-    "angular-ui-router": "~0.2.15",
-    "bootstrap-social": "~4.10.1",
-    "html5-boilerplate": "~5.2.0",
-    "angular-ui-sortable": "~0.13.4",
-    "jquery-ui": "~1.11.4"
-  },
-  "devDependencies": {}
+	"dependencies": {
+		"jquery": "~2.1.4",
+		"bootstrap": "~3.3.5",
+		"angular": "~1.4.5",
+		"angular-bootstrap": "~0.13.4",
+		"angular-loader": "~1.4.5",
+		"angular-loading-bar": "~0.8.0",
+		"angular-messages": "~1.4.6",
+		"angular-mocks": "~1.4.5",
+		"angular-route": "~1.4.5",
+		"angular-ui-router": "~0.2.15",
+		"bootstrap-social": "~4.10.1",
+		"html5-boilerplate": "~5.2.0",
+		"angular-ui-sortable": "~0.13.4",
+		"jquery-ui": "~1.11.4"
+	},
+	"devDependencies": {}
 }

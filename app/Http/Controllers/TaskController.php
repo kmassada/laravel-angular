@@ -8,6 +8,7 @@ use JWTAuth;
 use Auth;
 use App\Task;
 use App\Tag;
+use Log;
 use App\User;
 use App\Priority;
 use App\Http\Requests;
@@ -76,7 +77,12 @@ class TaskController extends Controller
      */
     public function update(Task $task, TaskRequest $request)
     {
-        $task->update($request->all());
+        Log::info($request->only(['title','notes', 'priority_id', 'status']));
+        $task->update($request->only(['title','notes', 'priority_id', 'status']));
+        if($task->status){
+          $task->update(['status'=>1]);
+        }
+        Log::info($task);
         $this->syncTags($task, $request->input('tag_list'));
 
         return response()->json(array('success' => true));

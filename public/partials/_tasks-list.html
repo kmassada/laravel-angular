@@ -1,49 +1,61 @@
 <!-- hide these tasks if the loading variable is true -->
+<style media="screen">
+    .vcenter {
+        display: inline-block;
+        vertical-align: middle;
+        float: none;
+    }
+</style>
 <div ng-hide="loading">
     <div class="row">
-            <div class="panel-body">
-                <ul class="list-group">
-                    <li class="list-group-item"  ng-repeat="task in taskCtrl.tasks">
-                        <div class="row">
-                            <div class="col-xs-10 col-md-11">
-                                <div>
-                                    <p ng-switch on="task.priority.id">
-                                      <a href="/#tasks">{{ task.title }}</a>
-                                        <span class="label label-default" ng-switch-when="1">{{  task.priority.name }}</span>
-                                        <span class="label label-warning" ng-switch-when="2">{{  task.priority.name }}</span>
-                                        <span class="label label-warning" ng-switch-when="3">{{  task.priority.name }}</span>
-                                        <span class="label label-warning" ng-switch-when="4">{{  task.priority.name }}</span>
-                                        <span class="label label-danger" ng-switch-when="5">{{  task.priority.name }}</span>
-                                        <span class="label label-default" ng-switch-default>{{  task.priority.name }}</span>
-                                    </p>
-                                </div>
-                                <div>
-                                    {{ task.notes }}
-                                    <p>
-                                    <ul class="pagination">
-                                      <li ng-repeat="tag in task.tags"><b>{{ tag.name }}</b> </li>
-                                    </ul>
-                                  </p>
-                                </div>
-                                <div class="mic-info">
-                                    <div class="span">
+        <div class="panel-body">
+            <table class="table-hover">
+                <tr class="list-group-item well" ng-repeat="task in taskCtrl.tasks" style="margin: 10px;padding: 5px">
+                    <td>
+                        <!-- <p align="right" class="btn-xs" title="Delete" type="button"> -->
+                          <button type="button" class="close btn-xs" ng-click="taskCtrl.deleteTask(task.id)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                            <div class="vcenter" style="padding:1px">
+                                <h4 align="center">
+                                    <div class="label" ng-click="taskCtrl.completeTask(task)" title="Done" type="button">
+                                        <span class="glyphicon btn-lg" ng-class="task.status? 'glyphicon-check' : 'glyphicon-unchecked'"></span>
                                     </div>
-                                </div>
-                                <div class="action">
-                                    <div type="button" class="label label-primary label-xs" title="Edit" ng-click="taskCtrl.editTask(task.id)">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </div>
-                                    <div type="button" class="label label-success label-xs" title="Done">
-                                        <span class="glyphicon glyphicon-ok"></span>
-                                    </div>
-                                    <div type="button" class="label label-danger label-xs" title="Delete" ng-click="taskCtrl.deleteTask(task.id)">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                    </div>
-                                </div>
+                                </h4>
                             </div>
+                            <div class="col-md-7 vcenter">
+                                <h5>{{ task.title | blurb:80 }}</h5>
+                            </div>
+                            <div class="vcenter" style="vertical-align:right">
+                                <h4 ng-switch on="task.priority.id">
+                                    <span class="label label-default" ng-switch-when="1">{{  task.priority.name | acronym}}</span>
+                                    <span class="label label-warning" ng-switch-when="2">{{  task.priority.name | acronym }}</span>
+                                    <span class="label label-warning" ng-switch-when="3">{{  task.priority.name | acronym }}</span>
+                                    <span class="label label-warning" ng-switch-when="4">{{  task.priority.name | acronym }}</span>
+                                    <span class="label label-danger" ng-switch-when="5">{{  task.priority.name | acronym }}</span>
+                                    <span class="label label-default" ng-switch-default>{{  task.priority.name | acronym }}</span>
+                                </h4>
+                            </div>
+                            <div align="right" class="vcenter btn" title="Edit" type="button">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </div>
+                            <div class="vcenter btn" ng-click="task.moreinfo=!task.moreinfo" title="More" type="button">
+                                <span class="glyphicon" ng-class="task.moreinfo==true? 'glyphicon-menu-down' : 'glyphicon-menu-right'"></span>
+                            </div>
+
                         </div>
-                    </li>
-                </ul>
-            </div>
+                        <div ng-hide="!task.moreinfo">
+                            <div class="col-md-11" style="font-size:14px; font-color:orange ">
+                                <p>{{ task.notes }}</p>
+                                <p align="right" style="padding:3px">
+                                    <b ng-repeat="tag in task.tags">
+                                        <a href="#">#{{ tag.name }}</a>
+                                    </b>
+                                </p>
+                            </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>

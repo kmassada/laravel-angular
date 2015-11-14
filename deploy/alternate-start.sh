@@ -1,8 +1,8 @@
 #PRE REQ
 composer self-update
-composer install
-npm install
-bower install
+composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
+# NODE_ENV=production npm install #npm only for dev
+bower install --production
 
 #DB SETUP
 DB_ROOT_PASSWORD=$1
@@ -21,3 +21,6 @@ rm $SITE-setup.sql
 # migrate
 php artisan migrate
 php artisan migrate:refresh --seed
+
+#touches
+sed -i 's/laravel5\-ng\.dev/pioneer.tadbit.cc/g' public/js/app.js

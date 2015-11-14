@@ -5,6 +5,7 @@ angular.module('taskApp', [
   'ui.router',
   'angular-loading-bar',
   'ngMessages',
+  'ui.bootstrap',
 ])
 .constant('url', {
    BASE: 'http://laravel5-ng.dev',

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Task extends Model
 {
-  protected $fillable=['title','notes','priority_id'];
+  protected $fillable=['title','notes','priority_id','status'];
 
   /**
    * [priority description]
@@ -26,7 +26,7 @@ class Task extends Model
   public function tags() {
       return $this->belongsToMany('App\Tag');
   }
-  
+
   /**
  * [scopeDue description]
  * @param  [type] $query [description]

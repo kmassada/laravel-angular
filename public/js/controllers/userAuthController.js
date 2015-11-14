@@ -1,14 +1,16 @@
 angular.module('taskApp')
 	.controller('UserAuthController', UserAuthController);
 
-UserAuthController.$inject = ['$state', '$q', '$window', '$log', '$scope','$rootScope', 'Auth', 'User', 'appStorage'];
+UserAuthController.$inject = ['$state', '$q', '$window', '$log', '$scope','$rootScope', 'Auth', 'User', 'appStorage', 'Alert', 'loginModal'];
 
-function UserAuthController($state, $q, $window, $log, $scope,$rootScope, Auth, User, appStorage) {
+function UserAuthController($state, $q, $window, $log, $scope,$rootScope, Auth, User, appStorage, Alert, loginModal) {
 	var userCtrl = this;
 	userCtrl.signin = signin;
 	userCtrl.register = register;
 	userCtrl.logout = logout;
+	userCtrl.open = open;
 	userCtrl.userLoggedIn = userLoggedIn;
+	userCtrl.cancel = $scope.$dismiss;
 	$rootScope.isLoggedIn = false;
 
 	// loading variable
@@ -36,6 +38,17 @@ function UserAuthController($state, $q, $window, $log, $scope,$rootScope, Auth, 
 		return deferred.promise;
 	}
 
+	 function open() {
+		 loginModal()
+			 .then(function () {
+				 $log.log("[appRun]: go next");
+				 return $state.go(toState.name, toParams);
+			 })
+			 .catch(function () {
+				 $log.warn("[appRun]: probs");
+				 return $state.go('home');
+			 });
+	 }
 	 function signin() {
 		userCtrl.loading = true;
 		var formData = {
@@ -50,11 +63,14 @@ function UserAuthController($state, $q, $window, $log, $scope,$rootScope, Auth, 
 					userLoggedIn()
 					.then(function () {
 						userCtrl.loading = false;
+						$scope.$close(userCtrl.me);
+						Alert.showAlert('success', '', 'Welcome!');
 						$state.go('tasks');
 					});
 				});
 			}, function () {
-				Alert.showAlert('danger', 'Hmmm....', 'you must have entered wrong credentials!');
+				console.log("bozo");
+				Alert.showAlert('danger', 'Hmmm....', 'you must have entered wrong credentials!', 'local');
 			});
 	}
 
@@ -69,7 +85,7 @@ function UserAuthController($state, $q, $window, $log, $scope,$rootScope, Auth, 
 		Auth.register(formData, function (res) {
 			$state.go('home');
 		}, function() {
-			Alert.showAlert('danger', 'Signup', 'Failed to signup');
+			Alert.showAlert('danger', 'Signup', 'Failed to signup', 'local');
 		});
 	}
 

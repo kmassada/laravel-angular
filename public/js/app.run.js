@@ -1,9 +1,9 @@
 angular.module('taskApp')
 	.run(runBlock);
 
-runBlock.$inject = ['$rootScope', '$state', '$log', 'appStorage', 'User'];
+runBlock.$inject = ['$rootScope', '$state', '$log', 'appStorage', 'User', 'loginModal'];
 
-function runBlock($rootScope, $state, $log, appStorage, User) {
+function runBlock($rootScope, $state, $log, appStorage, User, loginModal) {
 	$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 		// any public action is allowed
 		var isPublicAction = angular.isObject(toState.data) && toState.data.isPublic === true;
@@ -25,7 +25,15 @@ function runBlock($rootScope, $state, $log, appStorage, User) {
 				$state.go(toState, toParams);
 				return;
 		}else{
-			$state.go("login");
+			loginModal()
+        .then(function () {
+					$log.log("[appRun]: go next");
+          return $state.go(toState.name, toParams);
+        })
+        .catch(function () {
+					$log.warn("[appRun]: probs");
+          return $state.go('home');
+        });
 			return;
 		}
 	});

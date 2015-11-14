@@ -37,14 +37,6 @@ function routes($stateProvider, $urlRouterProvider) {
             templateUrl: 'partials/_tasks-edit.html',
         })
 
-        .state('login', {
-            url: '/login',
-            templateUrl: 'partials/_home-login.html',
-            controller: 'UserAuthController',
-            controllerAs: 'userCtrl',
-            data: { isPublic: true },
-        })
-
         .state('register', {
             url: '/register',
             templateUrl: 'partials/_home-register.html',

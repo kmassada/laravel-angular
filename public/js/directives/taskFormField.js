@@ -1,6 +1,6 @@
 angular.module('taskApp')
 	.directive('taskFormField', taskFormField);
-	
+
 taskFormField.$inject = ['$timeout'];
 
 function taskFormField($timeout) {
@@ -11,6 +11,7 @@ function taskFormField($timeout) {
 		scope: {
 			ngModel: '=',
 			field: '@',
+			label: '@',
 			live: '@',
 			required: '@',
 			fieldPlaceholder: '@',

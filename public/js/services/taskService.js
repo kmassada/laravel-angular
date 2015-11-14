@@ -1,9 +1,9 @@
 angular.module('taskApp')
 	.factory('Task', Task);
 
-Task.$inject = ['$http', 'url'];
+Task.$inject = ['$http', '$log', 'url'];
 
-function Task($http, url) {
+function Task($http, $log, url) {
 
 	var service = {
 		// get all the tasks
@@ -31,7 +31,6 @@ function Task($http, url) {
 
 		// update a task (pass in task data)
 		update: function (taskData) {
-			// console.log($.param(taskData));
 			return $http({
 				method: 'PUT',
 				url: url.BASE_API + '/api/tasks/' + taskData.id,

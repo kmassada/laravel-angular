@@ -1,29 +1,36 @@
-<div class="modal-body">
-    <div class="row">
-        <div class="col-md-6  col-md-offset-3">
-          <h3 class="panel-heading">Please sign in</h3>
-            <div class="well">
-                <form id="loginForm" method="POST" ng-controller="UserAuthController as userCtrl">
+        <div class="modal-content" ng-controller="UserAuthController as userCtrl">
+            <div class="modal-header">
+                <button aria-label="Close" ng-click="userCtrl.cancel()" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Login Form</h4>
+            </div>
+            <div class="modal-body">
+                <h3 class="panel-heading">Please sign in</h3>
+                <div ng-include="'partials/_alert.html'"></div>
+
+                <form id="loginForm" method="POST">
                     <div class="form-group">
-                        <label for="email" class="control-label">Email Address</label>
-                        <input type="text" class="form-control" name="email" value="" required="" title="Please enter your email" placeholder="email" ng-model=userCtrl.email>
+                        <label class="control-label" for="email">Email Address</label>
+                        <input class="form-control" name="email" ng-model=userCtrl.email placeholder="email" required="" title="Please enter your email" type="text" value="">
                         <span class="help-block"></span>
                     </div>
                     <div class="form-group">
-                        <label for="password" class="control-label">Password</label>
-                        <input type="password" class="form-control" name="password" placeholder="password" value="" required="" title="Please enter your password" ng-model=userCtrl.password>
+                        <label class="control-label" for="password">Password</label>
+                        <input class="form-control" name="password" ng-model=userCtrl.password placeholder="password" required="" title="Please enter your password" type="password" value="">
                         <span class="help-block"></span>
                     </div>
-                    <div id="loginErrorMsg" class="alert alert-error hide">Wrong username or password</div>
+                    <div class="alert alert-error hide" id="loginErrorMsg">Wrong username or password</div>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" name="remember" id="remember"> Remember login
+                            <input id="remember" name="remember" type="checkbox">
+                            Remember login
                         </label>
                         <p class="help-block"></p>
                     </div>
-                    <button type="submit" value="login" name="submit" class="btn btn-success btn-block" ng-click="userCtrl.signin()">Login</button>
                 </form>
             </div>
+            <div class="modal-footer">
+                <button class="btn btn-success btn" name="submit" ng-click="userCtrl.signin()" type="submit" value="login">Login</button>
+            </div>
         </div>
-    </div>
-</div>
