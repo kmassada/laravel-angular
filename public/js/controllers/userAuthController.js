@@ -41,12 +41,11 @@ function UserAuthController($state, $q, $window, $log, $scope,$rootScope, Auth, 
 	 function open() {
 		 loginModal()
 			 .then(function () {
-				 $log.log("[appRun]: go next");
-				 return $state.go(toState.name, toParams);
+				 $log.log("[UserAuthController]: go next");
 			 })
 			 .catch(function () {
-				 $log.warn("[appRun]: probs");
-				 return $state.go('home');
+				 $log.warn("[UserAuthController]: probs");
+				 return $state.go('^');
 			 });
 	 }
 	 function signin() {
