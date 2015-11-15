@@ -59,6 +59,8 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 		} else {
 			// save the task. pass in task data from the form
 			// use the function we created in our service
+			$log.log(taskFormCtrl.taskData);
+
 			Task.save(taskFormCtrl.taskData)
 				.success(function (data) {
 
@@ -167,6 +169,7 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 				});
 			});
 	}
+	loadOptions();
 
  	  function openTask(id) {
 			loadOptions();
@@ -177,24 +180,30 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 					templateUrl: 'partials/_tasks-form.html',
 					controller: function ($scope, $modalInstance) {
 						// set data for task in modal
-						Task.show(id)
-						.success(function (id) {
-								$scope.taskData = setTask(id);
-								$scope.taskPriorityOptions = taskPriorityOptions;
-								$scope.taskTagOptions = taskTagOptions;
-
-								$log.log($scope);
-						});
+						$scope.taskId=id;
+						$scope.taskData = {};
+						$scope.taskPriorityOptions = taskPriorityOptions;
+						$scope.taskTagOptions = taskTagOptions;
+						if (id){
+							Task.show(id)
+							.success(function (id) {
+									$scope.taskData = setTask(id);
+									$scope.taskPriorityOptions = taskPriorityOptions;
+									$scope.taskTagOptions = taskTagOptions;
+									$log.log($scope);
+							});
+						}
 
 						$scope.saveOrUpdate = function (form) {
 							addOrEditTask(form, $scope.taskData)
 							.then(function () {
-								$rootScope.$broadcast('task:load');
-
 								$modalInstance.close($scope.taskData);
 							});
 						};
-
+						$scope.delete = function () {
+							deleteTask($scope.taskId);
+							$modalInstance.close($scope.taskData);
+						};
 						$scope.cancel = function () {
 							$modalInstance.dismiss('cancel');
 						};
@@ -207,7 +216,7 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 			});
 
 		modalInstance.result.then(function(data) {
-			Alert.showAlert('success', 'success', data, 'local');
+			$rootScope.$broadcast('task:load');
     }, function() {
       $log.info('Modal dismissed at: ' + new Date());
     });

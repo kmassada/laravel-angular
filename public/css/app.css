@@ -1,3 +1,18 @@
 .label {
     margin-left: 5px;
 }
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+    min-height: 0 !important;
+}
+.mouse {
+    cursor: pointer;
+}
+h5 {
+    word-wrap: break-word;
+}
+.col-fixed-340 {
+    width: 340px;
+}

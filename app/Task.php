@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Task extends Model
 {
-  protected $fillable=['title','notes','priority_id','status'];
+  protected $fillable=['user_id', 'title','notes','priority_id','status'];
 
   /**
    * [priority description]

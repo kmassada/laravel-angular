@@ -1,33 +1,22 @@
 <!-- hide these tasks if the loading variable is true -->
-<style media="screen">
-    .vcenter {
-        display: inline-block;
-        vertical-align: middle;
-        float: none;
-    }
-    .mouse {
-    cursor: pointer;
-}
-</style>
-<div ng-hide="loading">
+<div ng-hide="taskCtrl.loading">
     <div class="row">
         <div class="panel-body">
             <table class="table-hover">
                 <tr class="list-group-item well" ng-repeat="task in taskCtrl.tasks" style="margin: 10px;padding: 5px">
                     <td>
-                        <!-- <p align="right" class="btn-xs" title="Delete" type="button"> -->
                         <button class="close btn-xs" ng-click="taskCtrl.deleteTask(task.id)" type="button">
                             <span class="glyphicon glyphicon-remove"></span>
                         </button>
-                        <div class="vcenter" style="padding:1px">
+                        <div class="col-md-1 vcenter" style="padding:1px">
                             <h4 align="center">
                                 <div class="label" ng-click="taskCtrl.completeTask(task)" title="Done" type="button">
                                     <span class="glyphicon btn-lg" ng-class="task.status? 'glyphicon-check' : 'glyphicon-unchecked'"></span>
                                 </div>
                             </h4>
                         </div>
-                        <div class="col-md-7 vcenter" href="#" ng-class="{mouse:mouse}" ng-mouseleave="mouse = false" ng-mouseenter="mouse = true" ng-controller="TaskFormController as taskFormCtrl" ng-click="taskFormCtrl.open(task.id)">
-                            <h5>{{ task.title | blurb:80 }}</h5>
+                        <div class="col-md-7 vcenter col-fixed-340" ng-controller="TaskFormController as taskFormCtrl">
+                            <h5 href="#" ng-class="{mouse:mouse}" ng-click="taskFormCtrl.open(task.id)" ng-mouseenter="mouse = true" ng-mouseleave="mouse = false">{{ task.title | blurb:80 }}</h5>
                         </div>
                         <div class="vcenter" style="vertical-align:right">
                             <h4 ng-switch on="task.priority.id">
@@ -39,10 +28,10 @@
                                 <span class="label label-default" ng-switch-default>{{  task.priority.name | acronym }}</span>
                             </h4>
                         </div>
-                        <div align="right" class="vcenter btn" ng-controller="TaskFormController as taskFormCtrl" ng-click="taskFormCtrl.open(task.id)" title="Edit" type="button">
+                        <div align="right" class="col-md-1 vcenter btn" ng-click="taskFormCtrl.open(task.id)" ng-controller="TaskFormController as taskFormCtrl" title="Edit" type="button">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </div>
-                        <div class="vcenter btn" ng-click="task.moreinfo=!task.moreinfo" title="More" type="button">
+                        <div class="col-md-1 vcenter btn" ng-click="task.moreinfo=!task.moreinfo" title="More" type="button">
                             <span class="glyphicon" ng-class="task.moreinfo==true? 'glyphicon-menu-down' : 'glyphicon-menu-right'"></span>
                         </div>
 

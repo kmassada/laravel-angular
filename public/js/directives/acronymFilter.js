@@ -3,8 +3,8 @@ angular.module('taskApp')
 
 function acronym() {
         return function (text) {
-            if (text.length<=0) {
-                return text;
+            if (!text) {
+                 text="None";
             }
 
             var acr = [];

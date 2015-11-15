@@ -83,7 +83,9 @@ class TaskController extends Controller
           $task->update(['status'=>1]);
         }
         Log::info($task);
-        $this->syncTags($task, $request->input('tag_list'));
+        if($request->input('tag_list')){
+          $this->syncTags($task, $request->input('tag_list'));
+        }
 
         return response()->json(array('success' => true));
     }
@@ -116,7 +118,9 @@ class TaskController extends Controller
      */
     private function createTask(TaskRequest $request) {
       $task=Auth::user()->tasks()->create($request->all());
-      $this->syncTags($task, $request->input('tag_list'));
+      if($request->input('tag_list')){
+        $this->syncTags($task, $request->input('tag_list'));
+      }
 
       return $task;
     }

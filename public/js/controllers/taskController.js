@@ -2,10 +2,10 @@ angular.module('taskApp')
 	.controller('TaskController', TaskController);
 
 // inject the Task service into our controller
-TaskController.$inject = ['$http', '$q', '$scope', '$log', '$rootScope', 'Task', 'Alert'];
+TaskController.$inject = ['$http', '$q', '$scope', '$timeout', '$log', '$rootScope', 'Task', 'Alert'];
 
 
-function TaskController($http, $q, $scope, $log, $rootScope, Task, Alert) {
+function TaskController($http, $q, $scope, $timeout, $log, $rootScope, Task, Alert) {
 	var taskCtrl = this;
 
 	// object to hold all the data for the new task form
@@ -24,7 +24,7 @@ function TaskController($http, $q, $scope, $log, $rootScope, Task, Alert) {
 		});
 
 	// function to handle editing a task
-	// taskCtrl.editTask = editTask;
+	taskCtrl.deleteTask = deleteTask;
 
 	// function to handle editing a task
 	taskCtrl.completeTask = completeTask;
@@ -58,20 +58,17 @@ function TaskController($http, $q, $scope, $log, $rootScope, Task, Alert) {
 		Task.update(myTask);
 	}
 
-	// function editTask(id) {
-	// 	$log.info("[TaskController]: Fired");
-	// 	// $scope.$emit('task:edit', id);
-	// 	$rootScope.$broadcast('edit', id);
-	//
-	// }
-
 	function loadTasks() {
-		Task.get()
-			.success(function (data) {
-				taskCtrl.tasks = data.tasks;
-				$rootScope.myTasks.count=data.tasks.length;
-				taskCtrl.loading = false;
-			});
+
+		taskCtrl.loading = true;
+		$timeout(function () {
+			Task.get()
+				.success(function (data) {
+					taskCtrl.tasks = data.tasks;
+					$rootScope.myTasks.count=data.tasks.length;
+					taskCtrl.loading = false;
+				});
+		}, 1000);
 	}
 
 	$scope.$on('task:load', function(event, data) {
