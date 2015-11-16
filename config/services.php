@@ -35,9 +35,9 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
     'facebook' => [
-    'client_id' => env('SOCIAL_FB_ID'),
-    'client_secret' => env('SOCIAL_FB_SECRET'),
-    'redirect' => env('SOCIAL_FB_CALLBACK'),
-],
+        'client_id' => env( 'FACEBOOK_CLIENT_ID' ),
+        'client_secret' => env( 'FACEBOOK_CLIENT_SECRET' ),
+        'redirect' => env( 'FACEBOOK_REDIRECT_URI' ),
+    ],
 
 ];

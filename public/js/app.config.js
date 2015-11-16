@@ -1,7 +1,7 @@
 // Declare app level module which depends on views, and components
 angular.module('taskApp')
 	.config(configure);
-    
+
 configure.$inject = ['$httpProvider', 'cfpLoadingBarProvider'];
 
 function configure($httpProvider, cfpLoadingBarProvider) {

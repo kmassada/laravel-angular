@@ -36,6 +36,11 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 	// function to handle editing a task
 	taskFormCtrl.completeTask = completeTask;
 
+	/**
+	 * [addOrEditTask]
+	 * @param {[type]} form     [description]
+	 * @param {[type]} taskData [description]
+	 */
 	function addOrEditTask(form, taskData) {
 		taskFormCtrl.taskData=taskData;
 		var deferred = $q.defer();

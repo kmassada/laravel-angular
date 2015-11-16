@@ -1,9 +1,9 @@
 angular.module('taskApp')
 	.controller('UserAuthController', UserAuthController);
 
-UserAuthController.$inject = ['$state', '$q', '$window', '$log', '$scope','$rootScope', 'Auth', 'User', 'appStorage', 'Alert', 'loginModal'];
+UserAuthController.$inject = ['$state', '$q', '$window', '$location', '$log', '$scope','$rootScope', 'Auth', 'User', 'appStorage', 'Alert', 'loginModal'];
 
-function UserAuthController($state, $q, $window, $log, $scope,$rootScope, Auth, User, appStorage, Alert, loginModal) {
+function UserAuthController($state, $q, $window, $location, $log, $scope,$rootScope, Auth, User, appStorage, Alert, loginModal) {
 	var userCtrl = this;
 	userCtrl.signin = signin;
 	userCtrl.register = register;
@@ -15,6 +15,61 @@ function UserAuthController($state, $q, $window, $log, $scope,$rootScope, Auth, 
 
 	// loading variable
 	userCtrl.loading = true;
+
+	if ( $location.search()) {
+			var attempt = {};
+			var search = $location.search();
+			for (var key in search) {
+				attempt[key] = search[key];
+				$location.search(key, null);
+			}
+			if ( attempt.first_name && attempt.last_name ) {
+				attempt.name = attempt.first_name + ' ' + attempt.last_name;
+			}
+
+			if(attempt && attempt.token) {
+				//set token. get current user;
+				appStorage.setData('token',attempt.token);
+				getMe()
+				.then(function (value) {
+					userLoggedIn()
+					.then(function () {
+						userCtrl.loading = false;
+						Alert.showAlert('success', '', 'Welcome!');
+						$state.go('tasks');
+					});
+				});
+			}
+			else if(attempt && attempt.provider==='facebook'){
+				console.log(attempt);
+				var word=makeid();
+				var formData = {
+					name: attempt.name,
+					email: attempt.email,
+					password: word,
+					password_confirmation: word,
+					provider: attempt.provider,
+					provider_id: attempt.provider_id,
+					provider_token: attempt.provider_token
+				};
+				console.log(formData);
+
+				Auth.register(formData, function (res) {
+					appStorage.setData('token',res.token);
+					getMe()
+					.then(function (value) {
+						userLoggedIn()
+						.then(function () {
+							userCtrl.loading = false;
+							Alert.showAlert('success', '', 'Welcome!');
+							$state.go('tasks');
+						});
+					});
+				}, function() {
+					Alert.showAlert('danger', 'Signup', 'Failed to signup', 'local');
+				});
+			}
+		}
 
 	function userLoggedIn() {
 		userCtrl.loading = true;
@@ -81,11 +136,23 @@ function UserAuthController($state, $q, $window, $log, $scope,$rootScope, Auth, 
 			password_confirmation: userCtrl.password_confirmation
 		};
 
-		Auth.register(formData, function (res) {
-			$state.go('home');
+		Auth.register(formData, function (data) {
+			appStorage.setData('token',data.token);
+			getMe()
+			.then(function (value) {
+				userLoggedIn()
+				.then(function () {
+					userCtrl.loading = false;
+					$scope.$close(userCtrl.me);
+					Alert.showAlert('success', '', 'Welcome!');
+					$state.go('tasks');
+				});
+			});
 		}, function() {
 			Alert.showAlert('danger', 'Signup', 'Failed to signup', 'local');
 		});
+
+
 	}
 
 	 function logout() {
@@ -118,4 +185,14 @@ function UserAuthController($state, $q, $window, $log, $scope,$rootScope, Auth, 
 	   $log.log("[userAuthController]: listenner");
 	   userCtrl.me = data.data.name;
 	 });
+	 function makeid()
+	{
+	    var text = "";
+	    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+	    for( var i=0; i < 10; i++ )
+	        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+	    return text;
+	}
 }

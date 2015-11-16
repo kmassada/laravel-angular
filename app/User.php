@@ -29,7 +29,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['name', 'email', 'password', 'facebook_id'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -55,6 +55,10 @@ class User extends Model implements AuthenticatableContract,
      * @return object Todo
      */
     public function tasks() {
-      return $this->hasMany('App\Task');
+      return $this->hasMany('\App\Task');
+    }
+
+    public function accounts() {
+      return $this->hasMany('\App\Account');
     }
 }

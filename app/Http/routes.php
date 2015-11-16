@@ -23,7 +23,6 @@ Route::group(['prefix' => 'v1/api', 'middleware' => 'cors'], function(){
   Route::post('/register',  ['uses' => 'UserAuthController@register', 'as' => 'user.register']);
   Route::post('/signin',  ['uses' => 'UserAuthController@signin', 'as' => 'user.signin']);
   Route::post('/logout',  ['uses' => 'UserAuthController@logout', 'as' => 'user.logout']);
+  Route::get('auth/callback/{provider}', 'UserAuthController@handleProviderCallback');
+  Route::get('auth/with/{provider}', 'UserAuthController@redirectToProvider');
 });
-
-Route::get('auth/facebook', 'UserAuthController@redirectToProvider');
-Route::get('auth/facebook/callback', 'UserAuthController@handleProviderCallback');
