@@ -7,29 +7,33 @@ class Account extends Model
 {
     use SoftDeletes;
 
-	public $table = "accounts";
+    public $table = "accounts";
 
-	public $primaryKey = "id";
+    public $primaryKey = "id";
 
-	public $timestamps = true;
+    public $timestamps = true;
 
-	public $fillable = [
-	    "provider",
-		"provider_id",
-		"user_id",
-		"access_token",
-		"refresh_token"
-	];
+    public $fillable = [
+      "provider",
+      "provider_id",
+      "user_id",
+      "access_token",
+      "refresh_token"
+    ];
 
-	public static $rules = [
-	    "provider" => "required",
-		"provider_id" => "required",
-		"user_id" => "required",
-		"access_token" => "required"
-	];
+    public static $rules = [
+      "provider" => "required",
+      "provider_id" => "required",
+      "user_id" => "required",
+      "access_token" => "required"
+    ];
 
+    /**
+     * establish relationship with User
+     *
+     * @return [type] [description]
+     */
     public function user() {
-        return $this->belongsTo('App\User');
+      return $this->belongsTo('App\User');
     }
-
 }

@@ -9,12 +9,13 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
 class Stat extends Model {
+
 	protected $fillable = array('*');
 
 	protected $dates= ['last_login'];
 
 	/**
-	 * [setLastLoginAttribute description]
+	 * set login attribute, on save
 	 * @param [type] $date [description]
 	 */
 	public function setLastLoginAttribute($date) {
@@ -22,7 +23,7 @@ class Stat extends Model {
 	}
 
 	/**
-	 * [getLastLoginAttribute description]
+	 * get login attribute on retrieve
 	 * @param  [type] $date [description]
 	 * @return [type]       [description]
 	 */
@@ -30,6 +31,10 @@ class Stat extends Model {
 		return (new Carbon($date))->toDateTimeString();
 	}
 
+	/**
+	 * Establish user relationship
+	 * @return [type] [description]
+	 */
 	public function user() {
 		return $this->belongsTo('User');
 	}

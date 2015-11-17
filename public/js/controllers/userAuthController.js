@@ -100,7 +100,7 @@ function UserAuthController($state, $q, $window, $location, $log, $scope,$rootSc
 			 })
 			 .catch(function () {
 				 $log.warn("[UserAuthController]: probs");
-				 return $state.go('^');
+				 return $state.go('tasks');
 			 });
 	 }
 	 function signin() {
@@ -143,7 +143,7 @@ function UserAuthController($state, $q, $window, $location, $log, $scope,$rootSc
 				userLoggedIn()
 				.then(function () {
 					userCtrl.loading = false;
-					$scope.$close(userCtrl.me);
+					// $scope.$close(userCtrl.me);
 					Alert.showAlert('success', '', 'Welcome!');
 					$state.go('tasks');
 				});

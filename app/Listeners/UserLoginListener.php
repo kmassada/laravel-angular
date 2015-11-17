@@ -6,9 +6,11 @@ namespace App\Listeners;
 use App\Stat;
 use App\User;
 use Auth;
+use Log;
 use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Events\UserLoginEvent;
 
 class UserLoginListener
 {
@@ -27,13 +29,19 @@ class UserLoginListener
      * @param  Events  $event
      * @return void
      */
-    public function handle(User $user, $remember) {
-      $this->collectStat();
+    public function handle(UserLoginEvent $event) {
+      $user=$event->user;
+      $this->collectStat($user);
     }
-    private function collectStat() {
+    /**
+     * Collect stats on user login
+     * @return [type] [description]
+     */
+    private function collectStat($user) {
       //collect stats on users
+      Log::info('collecting');
       $stat=new Stat;
-      $stat->user_id = Auth::user()->email;
+      $stat->user_id = $user->email;
       $stat->last_login = User::lastLoginDate();
       $stat->ip = $_SERVER['REMOTE_ADDR'];
       $stat->browser = $_SERVER['HTTP_USER_AGENT'];

@@ -5,10 +5,13 @@ namespace App\Listeners;
 use App\Stat;
 use App\User;
 use Auth;
+use Log;
 use Carbon\Carbon;
 use App\Events;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Events\UserLogoutEvent;
+
 
 class UserLogoutListener
 {
@@ -28,9 +31,10 @@ class UserLogoutListener
      * @param  Events  $event
      * @return void
      */
-    public function handle() {
-      if($stat=User::lastLoginStat()){
-        // dd($stat->created_at->diff(Carbon::now())->format('%hh:%im:%ss'));
+    public function handle(UserLogoutEvent $event) {
+      $user=$event->user;
+      if($stat=User::lastLoginStat($user)){
+        Log::log('logout duration');
         $stat->duration=$stat->created_at->diff(Carbon::now())->format('%hh:%im:%ss');
         $stat->last_login = Carbon::now();
         $stat->save();

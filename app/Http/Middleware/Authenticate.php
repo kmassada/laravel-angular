@@ -35,6 +35,7 @@ class Authenticate
     public function handle($request, Closure $next)
     {
         if ($this->auth->guest()) {
+            //Reject Ajax requests by quest
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             } else {

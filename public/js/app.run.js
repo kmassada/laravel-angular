@@ -32,7 +32,7 @@ function runBlock($rootScope, $state, $log, appStorage, User, loginModal) {
         })
         .catch(function () {
 					$log.warn("[appRun]: probs");
-          return $state.go('home');
+          return $state.go('tasks');
         });
 			return;
 		}

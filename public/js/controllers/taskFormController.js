@@ -74,9 +74,9 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 				})
 				.error(function (data) {
 					for (var key in data) {
-						Alert.showAlert('danger', key, data[key], 'local');
+						// Alert.showAlert('danger', key, data[key], 'local');
 						$log.error("[TaskController]: Saving task didint work");
-						$log.error(data[key]);
+						$log.error(data);
 						deferred.reject(data);
 					}
 				});
@@ -126,12 +126,12 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 				deferred.resolve(true);
 			})
 			.error(function (data) {
-				for (var key in data) {
-					Alert.showAlert('danger', key, data[key], 'local');
+				// for (var key in data) {
+					// Alert.showAlert('danger', key, data[key], 'local');
 					$log.error("[TaskController]: updating task didint work");
-					$log.error(data[key]);
-					deferred.reject(data);
-				}
+					$log.error(data.error);
+					// deferred.reject(data);
+				// }
 			});
 			return deferred.promise;
 	}
@@ -200,10 +200,10 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 						}
 
 						$scope.saveOrUpdate = function (form) {
-							addOrEditTask(form, $scope.taskData)
-							.then(function () {
+							addOrEditTask(form, $scope.taskData);
+							// .then(function () {
 								$modalInstance.close($scope.taskData);
-							});
+							// });
 						};
 						$scope.delete = function () {
 							deleteTask($scope.taskId);

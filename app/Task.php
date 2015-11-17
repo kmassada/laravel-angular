@@ -12,7 +12,7 @@ class Task extends Model
   protected $fillable=['user_id', 'title','notes','priority_id','status'];
 
   /**
-   * [priority description]
+   * establish relationship with priority
    * @return [type] [description]
    */
   public function priority()
@@ -20,7 +20,7 @@ class Task extends Model
       return $this->belongsTo('App\Priority');
   }
     /**
-   * [tags description]
+   * establish relationship with tags
    * @return [type] [description]
    */
   public function tags() {
@@ -28,8 +28,9 @@ class Task extends Model
   }
 
   /**
- * [scopeDue description]
- * @param  [type] $query [description]
+ *
+ * enforce user cannot save a task that's not user's
+ * @param  [type] $query [description
  * @return [type]        [description]
  */
   public function scopeOwn($query) {
@@ -37,7 +38,17 @@ class Task extends Model
   }
 
   /**
-   * [findByUser description]
+ *
+ * Query all tasks that are not done
+ * @param  [type] $query [description
+ * @return [type]        [description]
+ */
+  public function scopeTally($query) {
+    $this->scopeOwn($query->own()->where('status', 0)->where('active', 1));
+  }
+
+  /**
+   * new query to find all user's tasks
    * @param  [type] $id [description]
    * @return [type]     [description]
    */
@@ -53,7 +64,7 @@ class Task extends Model
   }
 
   /**
-   * [user description]
+   * establish relationship with user
    * @return [type] [description]
    */
   public function user() {
