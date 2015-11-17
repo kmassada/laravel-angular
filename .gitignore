@@ -6,3 +6,4 @@ Homestead.json
 Homestead
 config/enc
 .env.production
+public/img/avatars/
