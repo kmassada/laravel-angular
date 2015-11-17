@@ -5,7 +5,7 @@ set :application, 'pathfinder.tadbit.cc'
 set :repo_url, 'git@github.com:kmassada/laravel-angular.git'
 
 # Default branch is :master
-# ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
+ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, '/var/www/pathfinder.tadbit.cc'
@@ -22,6 +22,9 @@ set :log_level, :debug
 # Default value for :pty is false
 set :pty, true
 
+set :laravel_roles, :all
+set :laravel_artisan_flags, "--env=production"
+set :laravel_server_user, "deploy"
 # Default value for :linked_files is []
 # set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
 
@@ -45,19 +48,19 @@ namespace :deploy do
 
   desc 'Composer - install'
   task :composer_install do
-    on roles(:app), in: :sequence do
+    on roles(:app), in: :sequence, wait: 5 do
       within release_path do
-        execute 'cd #{current_path}'
-        execute 'composer install  --no-dev --quiet'
+        execute :composer, "self-update"
+        execute :composer, "install  --no-dev --quiet"
       end
     end
   end
 
-  desc 'Database - setup'
-  task :databas_setup do
+  desc 'Environment - setup'
+  task :env_setup do
     on roles(:app), in: :sequence do
-      within release_path do
-        upload(".env.production", "#{current_path}/.env")
+      on hosts do |host|
+        upload! '.env.production', '#{deploy_to}/current/.env'
       end
     end
   end
@@ -66,8 +69,7 @@ namespace :deploy do
   task :database_migration do
     on roles(:app), in: :sequence do
       within release_path do
-        execute 'cd #{current_path}'
-        execute 'yes|php artisan migrate'
+        execute :php, "artisan db:seed"
       end
     end
   end
@@ -76,21 +78,20 @@ namespace :deploy do
   task :database_seed do
     on roles(:app), in: :sequence do
       within release_path do
-        execute 'cd #{current_path}'
-        execute 'yes|php artisan db:seed'
+        execute :php, "artisan migrate"
       end
     end
   end
 
   desc 'Application - FIxes'
-  task :database_seed do
-    on roles(:app), in: :sequence do
-      within release_path do
-        execute 'cd #{current_path}'
-        execute 'chmod 777 -R storage'
-      end
+  task :application_fixes do
+      on roles(:app), in: :sequence, wait: 5 do
+            within release_path  do
+                execute :chmod, "u+x artisan"
+                execute :chmod, "-R 777 storage"
+            end
+        end
     end
-  end
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
@@ -101,7 +102,10 @@ namespace :deploy do
     end
   end
 
-  before :updated, 'deploy:ghost_install'
-  before :updated, 'deploy:ghost_symlink'
+  after :publishing, 'composer_install'
+  after :publishing, 'env_setup'
+  after :publishing, 'database_migration'
+  after :publishing, 'database_seed'
+  after :publishing, 'application_fixes'
   after :publishing, :restart
 end
