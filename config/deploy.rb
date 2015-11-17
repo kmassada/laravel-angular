@@ -22,9 +22,9 @@ set :log_level, :debug
 # Default value for :pty is false
 set :pty, true
 
-set :laravel_roles, :all
-set :laravel_artisan_flags, "--env=production"
-set :laravel_server_user, "deploy"
+# set :laravel_roles, :all
+# set :laravel_artisan_flags, "--env=production"
+# set :laravel_server_user, "deploy"
 # Default value for :linked_files is []
 # set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
 
@@ -50,7 +50,7 @@ namespace :deploy do
   task :composer_install do
     on roles(:app), in: :sequence, wait: 5 do
       within release_path do
-        execute :composer, "self-update"
+        # execute :composer, "self-update"
         execute :composer, "install  --no-dev --quiet"
       end
     end
@@ -59,11 +59,11 @@ namespace :deploy do
   desc 'Environment - setup'
   task :env_setup do
     on roles(:app), in: :sequence do
-      on hosts do |host|
+      within release_path do
         upload! '.env.production', '#{deploy_to}/current/.env'
-      end
     end
   end
+end
 
   desc 'Database - Migration'
   task :database_migration do
@@ -88,7 +88,7 @@ namespace :deploy do
       on roles(:app), in: :sequence, wait: 5 do
             within release_path  do
                 execute :chmod, "u+x artisan"
-                execute :chmod, "-R 777 storage"
+                execute :chmod, "-R 777 storage "
             end
         end
     end
