@@ -80,7 +80,8 @@ function UserAuthController($state, $q, $window, $location, $log, $scope,$rootSc
 		var deferred = $q.defer();
 
 		if(token && user){
-			userCtrl.me = user;
+			userCtrl.me = {'name':user};
+			getMe();
 			$rootScope.isLoggedIn = true;
 
 			$log.info("[userAuthController]: user and token are present");
@@ -118,7 +119,7 @@ function UserAuthController($state, $q, $window, $location, $log, $scope,$rootSc
 					.then(function () {
 						userCtrl.loading = false;
 						$scope.$close(userCtrl.me);
-						Alert.showAlert('success', '', 'Welcome!');
+						Alert.showAlert('success', '', 'Welcome!'.userCtrl.me.name);
 						$state.go('tasks');
 					});
 				});
@@ -182,8 +183,12 @@ function UserAuthController($state, $q, $window, $location, $log, $scope,$rootSc
 	}
 
 	$scope.$on('user:me', function(event,data) {
-	   $log.log("[userAuthController]: listenner");
-	   userCtrl.me = data.data.name;
+		$log.log("[userAuthController]: listenner");
+	   $log.log(data.data);
+	   userCtrl.me = {
+			 'name': data.data.name,
+			 'avatar': data.data.avatar,
+		 };
 	 });
 	 function makeid()
 	{

@@ -16,3 +16,16 @@ h5 {
 .col-fixed-340 {
     width: 340px;
 }
+input, select, textarea{
+  background-color: transparent !important;
+  border-bottom: 3px;
+  border-color: white !important;
+  color: white !important;
+  outline: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  width:5px;
+  color:transparent;
+  cursor:default;
+}

@@ -33,6 +33,13 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 	// new task creation
 	taskFormCtrl.newTask = newTask;
 
+	//submit on enter
+	taskFormCtrl.submitOnEnter = submitOnEnter;
+
+	//taskcreateinput
+	taskFormCtrl.createInput ="";
+
+
 	// function to handle editing a task
 	taskFormCtrl.completeTask = completeTask;
 
@@ -84,7 +91,23 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 		return deferred.promise;
 	}
 
+	function submitOnEnter() {
+		$log.log('[TaskFormController]: submission entered ');
 
+		taskData={
+			'title': taskFormCtrl.createInput,
+			'notes':  taskFormCtrl.createInput,
+		};
+		$log.log(taskData);
+
+		addOrEditTask(true, taskData).then(function () {
+			Alert.showAlert('success', '', 'New Task Created');
+		},function (data) {
+			Alert.showAlert('danger', 'Task Failed', data);
+		});
+
+
+	}
 	function newTask(id) {
 		taskFormCtrl.taskData = {};
 		refreshForm(taskFormCtrl.taskForm);

@@ -60,7 +60,7 @@ namespace :deploy do
   task :env_setup do
     on roles(:app), in: :sequence do
       within release_path do
-        upload! '.env.production', '#{deploy_to}/current/.env'
+        upload! ".env.production", "#{deploy_to}/current/"
     end
   end
 end
@@ -69,7 +69,7 @@ end
   task :database_migration do
     on roles(:app), in: :sequence do
       within release_path do
-        execute :php, "artisan db:seed"
+        execute "yes | php artisan migrate"
       end
     end
   end
@@ -78,7 +78,7 @@ end
   task :database_seed do
     on roles(:app), in: :sequence do
       within release_path do
-        execute :php, "artisan migrate"
+        execute "yes | php artisan db:seed"
       end
     end
   end

@@ -155,13 +155,16 @@ class UserAuthController extends Controller
         // try to find the account who wants to login or register
         $social_user = Socialite::driver($provider)->user();
         $social_account = Account::where('provider', $provider)->where('provider_id', $social_user->id)->first();
-
+        $social_avatar = str_replace('normal', 'large', $social_user->avatar);
         // if the account exists, either answer with a redirect or return the access token
         // this decision is made when we are checking if the request is an AJAX request
         Log::info($provider);
+        Log::info($social_avatar);
 
         if ($social_account) {
             $user = $social_account->user;
+            $this->handleAvatar($user,$social_avatar);
+
             Log::info("[App\UserAuthController]: Login event fired");
             event(new UserLoginEvent($user));
             if (!$request->ajax()) {
@@ -175,6 +178,7 @@ class UserAuthController extends Controller
         // similar to the previous use case, account fo AJAX request
         if ($social_user) {
             $user_exists = User::where('email', $social_user->user['email'])->first();
+            $this->handleAvatar($user,$social_avatar);
 
             if ($user_exists) {
                 if (isset($provider) && isset($social_user->id) && isset($social_user->token)) {
@@ -218,5 +222,34 @@ class UserAuthController extends Controller
         'provider_id' => $social_user->id,
         'provider_token' => $social_user->token,
         ), 200);
+    }
+
+    function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+    function handleAvatar($user,$avatar){
+      $old_avatar=$user->avatar;
+      $old_file = fopen(public_path().'/img/avatars/'.$old_avatar, 'w+');
+
+      if($avatar){
+        $data = file_get_contents($avatar);
+        if ($old_file){
+          $fileName = $old_avatar;
+        }else{
+        $fileName = $this->generateRandomString(12).'.jpg';
+        }
+          $file=fopen(public_path().'/img/avatars/'.$fileName, 'w+');
+        fputs($file, $data);
+        fclose($file);
+
+        $user->update(['avatar'=> $fileName]);
+
+      }
     }
 }

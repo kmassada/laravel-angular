@@ -3,7 +3,12 @@
     <div class="row">
         <div class="panel-body">
             <table class="table-hover">
-                <tr class="list-group-item well" ng-repeat="task in taskCtrl.tasks" style="margin: 10px;padding: 5px">
+                  <tr  class="list-group-item well col-md-12 vcenter" style="display:table">
+                    <td ng-include="'partials/_tasks-create.html'">
+                    </td>
+                  </tr>
+                  <tr class="list-group-item well" ng-repeat="task in taskCtrl.tasks" style="margin: 10px;padding: 5px">
+
                     <td>
                         <button class="close btn-xs" ng-click="taskCtrl.deleteTask(task.id)" type="button">
                             <span class="glyphicon glyphicon-remove"></span>
