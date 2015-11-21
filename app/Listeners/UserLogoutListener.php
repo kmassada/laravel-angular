@@ -33,10 +33,10 @@ class UserLogoutListener
      */
     public function handle(UserLogoutEvent $event) {
       $user=$event->user;
-      if($stat=User::lastLoginStat($user)){
+      if($stat=Stat::lastLoginStat($user)){
         Log::log('logout duration');
         $stat->duration=$stat->created_at->diff(Carbon::now())->format('%hh:%im:%ss');
-        $stat->last_login = Carbon::now();
+        $stat->last_login = $stat->created_at;
         $stat->save();
       }
     }

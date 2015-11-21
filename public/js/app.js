@@ -1,14 +1,12 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('taskApp', [
+angular.module('mainApp', [
   'ui.router',
-  'angular-loading-bar',
   'ngMessages',
-  'ui.bootstrap',
-   'ui.bootstrap.modal',
-])
-.constant('url', {
-   BASE: 'http://laravel5-ng.dev',
-   BASE_API: 'http://laravel5-ng.dev/v1'
-});
+  'angular-loading-bar',
+  'mainApp.user',
+  'mainApp.task',
+  'mainApp.map',
+  'mainApp.cal'
+]);

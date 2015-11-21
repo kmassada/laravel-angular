@@ -1,9 +1,15 @@
-angular.module('taskApp')
+angular.module('mainApp')
 	.run(runBlock);
 
 runBlock.$inject = ['$rootScope', '$state', '$log', 'appStorage', 'User', 'loginModal'];
 
 function runBlock($rootScope, $state, $log, appStorage, User, loginModal) {
+
+	//at run time
+  //override the default log level globally
+  // $log.currentLevel = $log.LEVELS.info;
+  // $log.debug($log.currentLevel);
+
 	$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 		// any public action is allowed
 		var isPublicAction = angular.isObject(toState.data) && toState.data.isPublic === true;
@@ -12,7 +18,7 @@ function runBlock($rootScope, $state, $log, appStorage, User, loginModal) {
 		var user = appStorage.getData('user');
 
 		if (isPublicAction || token) {
-			$log.log("[appRun]: checking public routes/auth routes");
+			$log.debug("[appRun]: checking public routes/auth routes");
 			return;
 		}
 		// stop state change
@@ -20,14 +26,14 @@ function runBlock($rootScope, $state, $log, appStorage, User, loginModal) {
 		event.preventDefault();
 		// async load user
 		if (token && user) {
-				$log.log("[appRun]: fukeri");
+				$log.debug("[appRun]: fukeri");
 				// let's continue, use is allowed
 				$state.go(toState, toParams);
 				return;
 		}else{
 			loginModal()
         .then(function () {
-					$log.log("[appRun]: go next");
+					$log.debug("[appRun]: go next");
           return $state.go(toState.name, toParams);
         })
         .catch(function () {

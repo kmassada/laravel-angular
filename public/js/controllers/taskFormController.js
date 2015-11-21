@@ -1,5 +1,5 @@
 
-angular.module('taskApp')
+angular.module('mainApp.task')
 	.controller('TaskFormController', TaskFormController);
 
 // inject the Task service into our controller
@@ -10,7 +10,7 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 	var taskFormCtrl = this;
 
 	$scope.$on('edit', function(event, id) {
-		$log.info("[TaskFormController]: recieve");
+		$log.debug("[TaskFormController]: recieve");
 		openTask(id);
 	});
 
@@ -59,9 +59,9 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 
 		if (taskFormCtrl.currentTask) {
 			taskFormCtrl.taskData.id = taskFormCtrl.currentTask.id;
-			$log.log("[TaskFormController]: passing to updating");
-			$log.log(taskFormCtrl.currentTask);
-			$log.log(taskFormCtrl.taskData);
+			$log.debug("[TaskFormController]: passing to updating");
+			$log.debug(taskFormCtrl.currentTask);
+			$log.debug(taskFormCtrl.taskData);
 			updateTask(taskFormCtrl.taskData).then(function () {
 				deferred.resolve(true);
 			}, function (data) {
@@ -71,7 +71,7 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 		} else {
 			// save the task. pass in task data from the form
 			// use the function we created in our service
-			$log.log(taskFormCtrl.taskData);
+			$log.debug(taskFormCtrl.taskData);
 
 			Task.save(taskFormCtrl.taskData)
 				.success(function (data) {
@@ -92,13 +92,13 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 	}
 
 	function submitOnEnter() {
-		$log.log('[TaskFormController]: submission entered ');
+		$log.debug('[TaskFormController]: submission entered ');
 
 		taskData={
 			'title': taskFormCtrl.createInput,
 			'notes':  taskFormCtrl.createInput,
 		};
-		$log.log(taskData);
+		$log.debug(taskData);
 
 		addOrEditTask(true, taskData).then(function () {
 			Alert.showAlert('success', '', 'New Task Created');
@@ -128,8 +128,8 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 			return tag.id;
 		});
 
-		$log.info("[TaskController]: Task marked as complete");
-		$log.log(myTask);
+		$log.debug("[TaskController]: Task marked as complete");
+		$log.debug(myTask);
 
 		Task.update(myTask);
 	}
@@ -138,13 +138,13 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 		var deferred = $q.defer();
 		// save the task. pass in task data from the form
 		// use the function we created in our service
-		$log.log("[TaskFormController]: Updating now");
-		$log.log(task);
+		$log.debug("[TaskFormController]: Updating now");
+		$log.debug(task);
 
 		Task.update(task)
 			.success(function (data) {
-				$log.log("[TaskFormController]: updated in API");
-				$log.log(data);
+				$log.debug("[TaskFormController]: updated in API");
+				$log.debug(data);
 				// if successful, we'll need to refresh the task list
 				deferred.resolve(true);
 			})
@@ -160,7 +160,7 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 	}
 
 	function setTask(data){
-			$log.log("[TaskFormController]: set");
+			$log.debug("[TaskFormController]: set");
 			task={};
 			taskFormCtrl.currentTask = data;
 			task.title = taskFormCtrl.currentTask.title;
@@ -170,7 +170,7 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 			task.tag_list = taskFormCtrl.currentTask.tags.map(function (tag) {
 				return tag.id;
 			});
-			$log.log(task);
+			$log.debug(task);
 			return task;
 	}
 
@@ -201,11 +201,11 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 
  	  function openTask(id) {
 			loadOptions();
-			$log.info("[TaskFormController]: open");
-			$log.log(id);
+			$log.debug("[TaskFormController]: open");
+			$log.debug(id);
 
 		var modalInstance = $modal.open({
-					templateUrl: 'partials/_tasks-form.html',
+					templateUrl: 'views/_tasks-form.html',
 					controller: function ($scope, $modalInstance) {
 						// set data for task in modal
 						$scope.taskId=id;
@@ -218,7 +218,7 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 									$scope.taskData = setTask(id);
 									$scope.taskPriorityOptions = taskPriorityOptions;
 									$scope.taskTagOptions = taskTagOptions;
-									$log.log($scope);
+									$log.debug($scope);
 							});
 						}
 
@@ -246,7 +246,7 @@ function TaskFormController($modal, $scope, $rootScope, $q, $timeout, $log, Aler
 		modalInstance.result.then(function(data) {
 			$rootScope.$broadcast('task:load');
     }, function() {
-      $log.info('Modal dismissed at: ' + new Date());
+      $log.debug('Modal dismissed at: ' + new Date());
     });
 	}
 

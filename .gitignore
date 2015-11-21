@@ -1,9 +1,22 @@
-/vendor
+# vendor packages
 /node_modules
-Homestead.yaml
-Homestead.json
-.env
-Homestead
+/vendor
+public/lib
+
+# env var
+.env*
+!.env.example
+!.env.test
+
+# config and build
 config/enc
-.env.production
+gulp/build
+public/config/production.json
+
+# homestead-files
+Homestead
+Homestead.json
+Homestead.yaml
+
+# data
 public/img/avatars/

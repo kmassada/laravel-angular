@@ -1,4 +1,4 @@
-angular.module('taskApp')
+angular.module('mainApp.task')
 	.controller('TaskController', TaskController);
 
 // inject the Task service into our controller
@@ -68,8 +68,8 @@ function TaskController($http, $q, $scope, $timeout, $log, $rootScope, Task, Ale
 		});
 
 		//Log action
-		$log.info("[TaskController]: Task marked as complete");
-		$log.log(taskCopy);
+		$log.debug("[TaskController]: Task marked as complete");
+		$log.debug(taskCopy);
 
 		//Process update
 		Task.update(taskCopy);
@@ -98,7 +98,7 @@ function TaskController($http, $q, $scope, $timeout, $log, $rootScope, Task, Ale
 	 * @return {[type]}                 [description]
 	 */
 	$scope.$on('task:load', function(event, data) {
-		$log.info("[TaskLoadController]: load");
+		$log.debug("[TaskLoadController]: load");
 		loadTasks();
 	});
 }

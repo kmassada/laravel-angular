@@ -1,4 +1,4 @@
-angular.module('taskApp')
+angular.module('mainApp')
 	.factory('Alert', Alert);
 
 Alert.$inject = ['$timeout', '$rootScope'];

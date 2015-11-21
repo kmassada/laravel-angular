@@ -11,7 +11,9 @@
 		"illuminate/html": "^5.0",
 		"tymon/jwt-auth": "^0.5.5",
 		"barryvdh/laravel-cors": "^0.7.1",
-		"laravel/socialite": "^2.0"
+		"laravel/socialite": "^2.0",
+		"geoip2/geoip2": "~2.0",
+		"facebook/php-sdk-v4": "~5.0"
 	},
 	"require-dev": {
 		"mockery/mockery": "0.9.*",

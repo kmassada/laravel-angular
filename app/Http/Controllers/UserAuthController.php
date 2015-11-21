@@ -70,7 +70,10 @@ class UserAuthController extends Controller
     public function logout(Request $request)
     {
         Log::info("[App\UserAuthController]: Logout event fired");
-        event(new UserLogoutEvent(Auth::user()));
+        Log::info($this->getAuthenticatedUser());
+
+        // $user=User::where('id', $request->user );
+        // event(new UserLogoutEvent($user));
 
         Log::info("[App\UserAuthController]: Attempt logout");
         Auth::logout();

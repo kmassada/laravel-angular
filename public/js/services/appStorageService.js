@@ -1,4 +1,4 @@
-angular.module('taskApp')
+angular.module('mainApp')
 	.factory('appStorage', appStorage);
 
 appStorage.$inject = ['$q', '$window', '$rootScope'];

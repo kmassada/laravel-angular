@@ -1,4 +1,4 @@
-angular.module('taskApp')
+angular.module('mainApp')
 	.constant('keyCodes', keyCodes);
 
 function keyCodes() {

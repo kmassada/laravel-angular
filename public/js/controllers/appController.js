@@ -1,4 +1,4 @@
-angular.module('taskApp')
+angular.module('mainApp')
 	.controller('AppController', AppController);
 
 // inject the Task service into our controller
@@ -17,6 +17,6 @@ function AppController($rootScope, $log, User) {
 	//crazy toggle idea, show webpage, and on click, show otherwise
 	function itemClick(){
 		appCtrl.visible=!appCtrl.visible;
-		$log.log("[AppController]: toggling entire view");
+		$log.debug("[AppController]: toggling entire view");
 	}
 }

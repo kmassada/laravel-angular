@@ -1,4 +1,4 @@
-angular.module('taskApp')
+angular.module('mainApp.user')
 	.service('loginModal', loginModal);
 
 loginModal.$inject = ['$modal', '$rootScope'];
@@ -11,7 +11,7 @@ function loginModal($modal, $rootScope) {
 
 		return function() {
 				var instance = $modal.open({
-						templateUrl: 'partials/_home-login.html',
+						templateUrl: 'views/_home-login.html',
 						controller: 'UserAuthController',
 						controllerAs: 'userCtrl'
 				});

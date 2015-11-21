@@ -1,9 +1,9 @@
-angular.module('taskApp')
+angular.module('mainApp.user')
 	.controller('UserAuthController', UserAuthController);
 
-UserAuthController.$inject = ['$state', '$q', '$window', '$location', '$log', '$scope','$rootScope', 'Auth', 'User', 'appStorage', 'Alert', 'loginModal'];
+UserAuthController.$inject = ['$state', '$q', '$window', '$location', '$log', '$scope','$rootScope', 'Auth', 'User', 'appStorage', 'Alert', 'loginModal', 'url'];
 
-function UserAuthController($state, $q, $window, $location, $log, $scope,$rootScope, Auth, User, appStorage, Alert, loginModal) {
+function UserAuthController($state, $q, $window, $location, $log, $scope,$rootScope, Auth, User, appStorage, Alert, loginModal, url) {
 	var userCtrl = this;
 	userCtrl.signin = signin;
 	userCtrl.register = register;
@@ -12,6 +12,9 @@ function UserAuthController($state, $q, $window, $location, $log, $scope,$rootSc
 	userCtrl.userLoggedIn = userLoggedIn;
 	userCtrl.cancel = $scope.$dismiss;
 	$rootScope.isLoggedIn = false;
+	userCtrl.login={
+		fb : url.BASE_API + '/auth/with/facebook'
+	};
 
 	// loading variable
 	userCtrl.loading = true;
@@ -76,7 +79,7 @@ function UserAuthController($state, $q, $window, $location, $log, $scope,$rootSc
 		var token = appStorage.getData('token');
 		var user = appStorage.getData('user');
 
-		$log.log("[userAuthController]: verify user state");
+		$log.debug("[userAuthController]: verify user state");
 		var deferred = $q.defer();
 
 		if(token && user){
@@ -84,7 +87,7 @@ function UserAuthController($state, $q, $window, $location, $log, $scope,$rootSc
 			getMe();
 			$rootScope.isLoggedIn = true;
 
-			$log.info("[userAuthController]: user and token are present");
+			$log.debug("[userAuthController]: user and token are present");
 			deferred.resolve(true);
 		}else{
 			$rootScope.isLoggedIn = false;
@@ -97,7 +100,7 @@ function UserAuthController($state, $q, $window, $location, $log, $scope,$rootSc
 	 function open() {
 		 loginModal()
 			 .then(function () {
-				 $log.log("[UserAuthController]: go next");
+				 $log.debug("[UserAuthController]: go next");
 			 })
 			 .catch(function () {
 				 $log.warn("[UserAuthController]: probs");
@@ -167,7 +170,7 @@ function UserAuthController($state, $q, $window, $location, $log, $scope,$rootSc
 	function getMe() {
 		 userCtrl.loading = true;
 
-		 $log.log("[userAuthController]: retrieve and save to storage current user");
+		 $log.debug("[userAuthController]: retrieve and save to storage current user");
 		 var deferred = $q.defer();
 
 		 User.getAuthObject()
@@ -183,8 +186,8 @@ function UserAuthController($state, $q, $window, $location, $log, $scope,$rootSc
 	}
 
 	$scope.$on('user:me', function(event,data) {
-		$log.log("[userAuthController]: listenner");
-	   $log.log(data.data);
+		$log.debug("[userAuthController]: listenner");
+	   $log.debug(data.data);
 	   userCtrl.me = {
 			 'name': data.data.name,
 			 'avatar': data.data.avatar,

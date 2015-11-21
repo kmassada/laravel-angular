@@ -1,4 +1,4 @@
-angular.module('taskApp')
+angular.module('mainApp.task')
 	.directive('taskCreateField', taskCreateField);
 
 function taskCreateField() {

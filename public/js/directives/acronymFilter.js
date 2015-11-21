@@ -1,4 +1,4 @@
-angular.module('taskApp')
+angular.module('mainApp')
 	.filter('acronym', acronym);
 
 function acronym() {

@@ -18,6 +18,7 @@ Route::get('/', function () {
 
 // API Protected
 Route::group(['prefix' => 'v1/api', 'middleware' => 'cors'], function(){
+Route::get('search/{value}', 'ApiSearchController@search');
   Route::group(['middleware' => 'jwt.auth'], function(){
     Route::resource('tasks', 'TaskController');
     Route::get('/user/me',  ['uses' => 'UserAuthController@getAuthenticatedUser', 'as' => 'user.get.auth']);

@@ -1,4 +1,4 @@
-angular.module('taskApp')
+angular.module('mainApp.task')
 	.directive('keyCodesField', keyCodesField);
 
 taskFormField.$inject = ['$log'];
@@ -10,11 +10,11 @@ function keyCodesField($log) {
 		link: function ($scope, $element, $attrs) {
 			$element.bind("keypress", function (event) {
 				var keyCode = event.which || event.keyCode;
-				// $log.log(keyCode);
+				// $log.debug(keyCode);
 				if (keyCode == $attrs.code) {
-					$log.log('KEY MATCH');
+					$log.debug('KEY MATCH');
 					$scope.$apply(function () {
-					$log.log($attrs.keyCodesField);
+					$log.debug($attrs.keyCodesField);
 						$scope.$eval($attrs.keyCodesField, {
 							$event: event
 						});

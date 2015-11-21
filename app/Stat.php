@@ -38,4 +38,20 @@ class Stat extends Model {
 	public function user() {
 		return $this->belongsTo('User');
 	}
+
+	/**
+	 * [lastLogin description]
+	 * @return [type] [description]
+	 */
+	public static function lastLoginDate($user) {
+		$stat=Stat::lastLoginStat($user);
+		return ($stat && $stat->last_login) ? $stat->last_login : Carbon::now();
+	}
+	/**
+	 * [lastLogin description]
+	 * @return [type] [description]
+	 */
+	public static function lastLoginStat($user) {
+		return Stat::where('user_id', $user)->latest('created_at')->first();
+	}
 }

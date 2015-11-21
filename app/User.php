@@ -67,20 +67,4 @@ class User extends Model implements AuthenticatableContract,
     public function accounts() {
       return $this->hasMany('\App\Account');
     }
-
-    /**
-     * [lastLogin description]
-     * @return [type] [description]
-     */
-    public static function lastLoginDate() {
-      $stat=User::lastLoginStat(Auth::user());
-      return ($stat && $stat->last_login) ? $stat->last_login : Carbon::now();
-    }
-    /**
-     * [lastLogin description]
-     * @return [type] [description]
-     */
-    public static function lastLoginStat($user) {
-      return Stat::where('user_id', $user? $user: Auth::user())->latest('created_at')->first();
-    }
 }

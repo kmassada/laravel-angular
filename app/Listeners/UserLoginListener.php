@@ -42,7 +42,7 @@ class UserLoginListener
       Log::info('collecting');
       $stat=new Stat;
       $stat->user_id = $user->email;
-      $stat->last_login = User::lastLoginDate();
+      $stat->last_login = Stat::lastLoginDate($user);
       $stat->ip = $_SERVER['REMOTE_ADDR'];
       $stat->browser = $_SERVER['HTTP_USER_AGENT'];
       $stat->save();
