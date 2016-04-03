@@ -1,9 +1,8 @@
-<div class="container">
-<div  ng-controller="TaskController as taskCtrl" class="col-md-8  col-md-offset-2">
+<div  ng-controller="TaskController as taskCtrl" class="container">
   <div class="span">
 
 <!-- PAGE TITLE =============================================== -->
-<div class="page-header">
+<div class="page-header center col-md-9">
     <h4 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> Task Application
       | <button class="btn btn-xs btn-success" ng-controller="TaskFormController as taskFormCtrl" ng-click="taskFormCtrl.open(0)" style="align:left">New</a></h4>
 </div>
@@ -13,9 +12,8 @@
 <p class="text-center" ng-show="taskCtrl.loading"><span class="fa fa-refresh fa-5x fa-spin"></span></p>
 
 <!-- THE TASKS =============================================== -->
-<div ng-include="'views/_tasks-list.html'"></div>
+<div ng-include="'views/_tasks-list.html'" class="center col-md-9"></div>
 
 
   </div>
-</div>
 </div>

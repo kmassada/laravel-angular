@@ -24,6 +24,15 @@ function TaskController($http, $q, $scope, $timeout, $log, $rootScope, Task, Ale
 	// function to handle editing a task
 	taskCtrl.completeTask = completeTask;
 
+	taskCtrl.severitylevels = {
+		"Low"        : "default",
+		"Medium Low" : "warning",
+		"Medium"     : "warning",
+		"Medium High": "danger",
+		"High"       : "danger",
+	};
+
+
 	/**
 	 *  get all the tasks first and bind it to the taskCtrl.tasks object
 	 * @return {[type]} [description]

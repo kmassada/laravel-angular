@@ -1,19 +1,13 @@
 <div ng-controller="AppController as appCtrl">
-<div class="text-center" ng-show="appCtrl.visible">
-  <div ng-click="appCtrl.visible=!appCtrl.visible">
-    <h1><img src="./img/larang.png" width="50%" alt="" /></h1>
-    <p>This page was built solely for <span class="text-danger">educational</span> purposes.</p>
-  </div>
-    <a ui-sref=".credits" class="btn btn-primary">Credits</a>
-    <a class="btn btn-block btn-social btn-github" href="https://github.com/kmassada/laravel-angular/">
-      <i class="fa fa-github"></i> github project
-    </a>
-</div>
 <div class="text-center" ng-hide="appCtrl.visible">
     <div class="jumbotron">
       <div class="container">
         <h2>Welcome to <\Pathfinder></h2>
         <p>This project was built to shacase various technologies and how they can co-exist, forming a platorm. Below we describes each of their repective roles and how it helps us to create a full web-application</p>
+        <a class="btn btn-info" href="https://github.com/kmassada/laravel-angular/">
+          <i class="fa fa-github"></i> github project
+        </a>
+        <a ui-sref=".credits" class="btn btn-primary">Credits</a>
       </div>
     </div>
     <div class="container">

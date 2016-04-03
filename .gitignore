@@ -2,6 +2,7 @@
 /node_modules
 /vendor
 public/lib
+public/fonts
 
 # env var
 .env*

@@ -10,6 +10,14 @@ var gulp            = require('gulp'),
 
 var gulpBuildPath = './gulp/build/';
 var htmlTarget = gulp.src('./public/index.html');
+var paths = {
+    'resources': {
+        'fonts': './public/fonts/',
+    },
+    'assets': {
+        'bower': './public/lib/',
+    }
+};
 
 /**
  * automatically add path to new bower/npm js files
@@ -33,7 +41,13 @@ var htmlTarget = gulp.src('./public/index.html');
                            './dist/js/vendor/modernizr*.js',
                            './dist/css/*.css',
                        ]
-                   }
+                   },
+                    'font-awesome': {
+                        main: [
+                            './css/*.min.css',
+                            './font/*.*',
+                        ]
+                    }
                }
            }), { base: './public/tests/lib', read: false });
 
@@ -100,6 +114,24 @@ gulp.task('config', function () {
     .pipe(livereload());
 });
 
+/**
+ * task to reload html
+ * @return html
+ */
+gulp.task('html', function() {
+    return gulp.src([
+        './public/views/**/*.html'
+    ])
+    .pipe(livereload());
+});
+
+gulp.task('icons', function() {
+  return gulp.src([
+       paths.assets.bower+'font-awesome/fonts/**/*.*',
+     ])
+     .pipe(gulp.dest(paths.resources.fonts));
+});
+
 gulp.task('watch', function() {
    livereload.listen();
    // watch config changes
@@ -108,14 +140,19 @@ gulp.task('watch', function() {
    ], ['config']);
 
    gulp.watch([
-     './public/lib/**/*.json'
+     './public/lib/**/*.json',
+     './public/lib/**/*.css'
    ], ['libDepend']);
 
 
   gulp.watch([
     './public/js/**/*.js',
   ], ['appDepend']);
+
+  gulp.watch([
+    './public/views/**/*.html',
+  ], ['html']);
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['libDepend', 'appDepend', 'watch']);
+gulp.task('default', ['icons','libDepend', 'appDepend', 'watch']);
