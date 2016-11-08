@@ -12,11 +12,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
 
-        // $this->call(UserTableSeeder::class);
-        $this->call(TasksTableSeeder::class);
+        if( app()->environment() !== 'production' )
+        {
+          $this->call(UsersTableSeeder::class);
+          $this->call(PrioritiesTableSeeder::class);
+          $this->call(TasksTableSeeder::class);
+          $this->call(TagsTableSeeder::class);
+          $this->call(TaskPrioritiesTableSeeder::class);
+          $this->call(TaskTagsTableSeeder::class);
 
-        Model::reguard();
+          Model::reguard();
+        }
     }
 }

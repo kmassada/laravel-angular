@@ -5,3 +5,4 @@ Homestead.json
 .env
 Homestead
 .DS_Store
+config/enc

@@ -1,0 +1,45 @@
+<!-- NAVIGATION -->
+<nav class="navbar navbar-default" role="navigation"  ng-cloak>
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <!-- <a class="navbar-brand" ui-sref="home">Laravel/Angular</a> -->
+  </div>
+
+  <div class="navbar-collapse collapse" ng-controller="UserAuthController as userCtrl" ng-init="userCtrl.userLoggedIn()">
+    <div ng-show="userCtrl.loading">
+       <i class="fa fa-spinner fa-spin"></i>
+    </div>
+    <div ng-hide="userCtrl.loading" ng-cloak>
+    <ul class="nav navbar-nav">
+      <li><a ui-sref="home"><i class="glyphicon glyphicon-home"></i> Home</a></li>
+      <li><a ui-sref="tasks"><i class="glyphicon glyphicon-th-list"></i> Tasks <span class="badge" ng-show="isLoggedIn"  ng-cloak> 42</span></a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right nav-pills" ng-show="isLoggedIn"  ng-cloak>
+      <li role="presentation" class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          <i class="glyphicon glyphicon-user"></i> {{userCtrl.me}}<span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a ng-click="userCtrl.logout()" href><i class="glyphicon glyphicon-log-out"></i> Logout</a></li>
+        </ul>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right nav-pills" ng-hide="isLoggedIn"  ng-cloak>
+      <li><a ui-sref="register"><i class="glyphicon glyphicon-plus"></i> Register</a></li>
+      <li role="presentation" class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          <i class="glyphicon glyphicon-user"></i><span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a ui-sref="login"><i class="glyphicon glyphicon-log-in"></i> Login in</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div>
+  </div>
+</nav>

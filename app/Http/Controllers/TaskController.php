@@ -4,13 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use JWTAuth;
+use Auth;
 use App\Task;
+use App\Tag;
+use App\User;
+use App\Priority;
 use App\Http\Requests;
 use App\Http\Requests\TaskRequest;
 use App\Http\Controllers\Controller;
 
 class TaskController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -18,8 +24,14 @@ class TaskController extends Controller
      */
     public function index()
     {
-      $tasks=Task::all();
-      return response()->json($tasks);
+      $token = JWTAuth::getToken();
+      $user = JWTAuth::toUser($token);
+
+      $data['user']=\Auth::User();
+      $data['tasks']=Task::with('priority','tags')->own()->get();
+      $data['priorities']=Priority::all();
+      $data['tags']=Tag::all();
+      return response()->json($data);
     }
 
     /**
@@ -40,7 +52,7 @@ class TaskController extends Controller
      */
     public function store(TaskRequest $request)
     {
-        $task=Task::create($request->all());
+        $this->createTask($request);
         return response()->json(array('success' => true));
     }
 
@@ -50,19 +62,9 @@ class TaskController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show(Task $task) {
+    public function show(Task $task, TaskRequest $request) {
+        $task=Task::with('priority','tags')->where('id',$task->id)->first();
         return response()->json($task);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit(Task $task)
-    {
-        return view('tasks.edit', compact('task'));
     }
 
     /**
@@ -75,6 +77,8 @@ class TaskController extends Controller
     public function update(Task $task, TaskRequest $request)
     {
         $task->update($request->all());
+        $this->syncTags($task, $request->input('tag_list'));
+
         return response()->json(array('success' => true));
     }
 
@@ -84,9 +88,30 @@ class TaskController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy(Task $task)
+    public function destroy(Task $task, TaskRequest $request)
     {
         $task->delete();
         return response()->json(array('success' => true));
+    }
+
+    /**
+     * sync tags to Task
+     * @param  Task   $task Object
+     * @return void
+     */
+    private function syncTags(Task $task, array $tags) {
+      $task->tags()->sync($tags);
+    }
+
+    /**
+     * create a Task
+     * @param  TaskRequest $request
+     * @return task               created task Object
+     */
+    private function createTask(TaskRequest $request) {
+      $task=Auth::user()->tasks()->create($request->all());
+      $this->syncTags($task, $request->input('tag_list'));
+
+      return $task;
     }
 }

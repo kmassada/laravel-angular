@@ -1,28 +1,51 @@
-angular.module('taskService', [])
+angular.module('taskApp')
+	.factory('Task', Task);
 
-.factory('Task', function($http) {
+Task.$inject = ['$http', 'url'];
 
-    return {
-        // get all the tasks
-        get : function() {
-            return $http.get('/api/tasks');
-        },
+function Task($http, url) {
 
-        // save a task (pass in task data)
-        save : function(taskData) {
-            // console.log($.param(taskData));
-            return $http({
-                method: 'POST',
-                url: '/api/tasks',
-                headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
-                data: $.param(taskData)
-            });
-        },
+	var service = {
+		// get all the tasks
+		get: function () {
+			return $http.get(url.BASE_API + '/api/tasks');
+		},
 
-        // destroy a task
-        destroy : function(id) {
-            return $http.delete('/api/tasks/' + id);
-        }
-    }
+		// get single tasks
+		show: function (id) {
+			return $http.get(url.BASE_API + '/api/tasks/' + id);
+		},
 
-});
+		// save a task (pass in task data)
+		save: function (taskData) {
+			// console.log($.param(taskData));
+			return $http({
+				method: 'POST',
+				url: url.BASE_API + '/api/tasks',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				data: $.param(taskData)
+			});
+		},
+
+		// update a task (pass in task data)
+		update: function (taskData) {
+			// console.log($.param(taskData));
+			return $http({
+				method: 'PUT',
+				url: url.BASE_API + '/api/tasks/' + taskData.id,
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				data: $.param(taskData)
+			});
+		},
+
+		// destroy a task
+		destroy: function (id) {
+			return $http.delete(url.BASE_API + '/api/tasks/' + id);
+		}
+	};
+	return service;
+}

@@ -1,3 +1,6 @@
+## My project
+[![Build Status](https://travis-ci.org/kmassada/laravel-angular.svg?branch=laravel-angular-1.5)](https://travis-ci.org/kmassada/laravel-angular)
+
 ## Laravel PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
@@ -18,61 +21,66 @@ Documentation for the framework can be found on the [Angular website](https://an
 
 ## PROJECT
 
-We've created a [full CRUD Laravel App](https://github.com/kmassada/laravel-angular/tree/basic-laravel)
+This is a devops chapter.
 
-We made Laravel an [API serving app ](https://github.com/kmassada/laravel-angular/tree/basic-laravel-api)
+- Install Travis CLI tool
+gem install travis
+- Authenticate to your account
+travis login
+- Encrypt password and add it to .travis.yml file
+travis encrypt DEPLOY_KEY="encryption-password" --add
+- Encrypt deploy_id_rsa private RSA key file, that will be used for deploy
+openssl aes-256-cbc -k "encryption-password" -in deploy_id_rsa -out config/deploy_id_rsa_enc_travis -a
 
-We imported angular resources into our [hybrid app ](https://github.com/kmassada/laravel-angular/tree/angular-init)
+# .travis.yml
+after_success:
+  - "openssl aes-256-cbc -k $DEPLOY_KEY -in config/deploy_id_rsa_enc_travis -d -a -out config/deploy_id_rsa"
+  - "bundle exec cap deploy"
 
-now we focus on creating basic angular tasks, like fetching data from laravel's endpoints
+  # deploy.rb
+set :ssh_options, keys: ["config/deploy_id_rsa"] if File.exist?("config/deploy_id_rsa")
 
-first we cleanup the project structure, changing from MVW to MVVM, each controller a module of it's own,
-```JS
-angular.module('taskApp', [
-  // 'ngRoute',
-  'taskCtrl',
-  'taskService',
-])
-```
+[[ $TRAVIS_BRANCH = 'master' ]] && bundle exec cap deploy
 
-we remove all the routing references. as a starter we are treating this app like a single page, so we move ng-app and ng-controller references
+gem install capistrano
+cap install
+set :application, "YourApplicationName"
+set :repository, "git@github.com:your-username/your-repository-name.git"
+set :deploy_to, "/path/to/your/app"
 
-```html
-<body class="container" ng-app="taskApp" ng-controller="mainController"> <div class="col-md-8 col-md-offset-2">
-```
+set :scm, :git
+set :branch, "master"
 
-having the controller only apply to the body, different from our hybrid app architecture, where partials dictated that.
+set :user, "bill"
+set :use_sudo, false
+set :deploy_via, :copy
+set :ssh_options, { :forward_agent => true, :port => 4321 }
+set :keep_releases, 5
+server "www.example.com", :app, :web, :db, :primary => true
 
-we create service like functions to make calls to the api. note the use of `$.param` to transform the object into parameters that api understands
-
-```JS
-// save a task (pass in task data)
-    save : function(taskData) {
-        // console.log($.param(taskData));
-        return $http({
-            method: 'POST',
-            url: '/api/tasks',
-            headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
-            data: $.param(taskData)
-        });
-    },
-```
-
-then in our mainController we use similar tactics. we make functions with scope that we call call in our `index.html`, that leverage the service
-
-```JS
-$scope.deleteTask = function(id) {
-      $scope.loading = true;
-
-      // use the function we created in our service
-      Task.destroy(id)
-          .success(function(data) {
-```
-
-*expansion*
-
-- make single page routes with route-ui, for the application's main layout
 
 ### License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+
+### Credits LongList
+
+- AUTH
+  + [tymondesigns/jwt-auth](https://github.com/tymondesigns/jwt-auth)
+  + [barryvdh/laravel-cors](https://github.com/barryvdh/laravel-cors)
+  + [Cookies vs Tokens. Getting auth right with Angular.JS](https://auth0.com/blog/2014/01/07/angularjs-authentication-with-cookies-vs-token/)
+  + [AUTH0 starter NodeJS/Angular AUTH app](https://github.com/auth0/angular-token-auth)
+  + [Cookie free auth with jwt](http://www.toptal.com/web/cookie-free-authentication-with-json-web-tokens-an-example-in-laravel-and-angularjs)
+  + [JWT Debugger](http://jwt.io)
+
+- DEV HELPERS
+  + [fzaninotto/Faker](https://github.com/fzaninotto/Faker)
+  + [laracasts/Laravel-5-Generators-Extended](https://github.com/laracasts/Laravel-5-Generators-Extended)
+  + **irc**: Spot__, epimeth, icebox
+
+- LARAVEL RESOURCES
+
+- ANGULAR RESOURCES
+  + [Interceptors in angularjs](http://www.webdeveasy.com/interceptors-in-angularjs-and-useful-examples/)
+  + [Angular UI Router](https://github.com/angular-ui/ui-router/wiki/Quick-Reference)
+  + [John Papa Style Guide](https://github.com/johnpapa/angular-styleguide)
