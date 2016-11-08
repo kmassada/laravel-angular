@@ -19,7 +19,7 @@ class TasksTableSeeder extends Seeder
         foreach(range(1, 20) as $index)
         {
           Task::create([
-          'user_id' => rand(1,5),
+          'user_id' => rand(1,4),
           'title' => implode($faker->sentences(2)),
           'priority_id' => rand(1,4),
           'notes' => implode($faker->paragraphs(4)),

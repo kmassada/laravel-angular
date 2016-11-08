@@ -3,6 +3,8 @@
 namespace App;
 
 use Hash;
+use Auth;
+use Carbon\Carbon;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -29,7 +31,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['name', 'email', 'password', 'avatar'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -51,10 +53,18 @@ class User extends Model implements AuthenticatableContract,
       return $this->belongsTo('\App\Role');
     }
     /**
-     * return todos
-     * @return object Todo
+     * return tasks
+     * @return object Task
      */
     public function tasks() {
-      return $this->hasMany('App\Task');
+      return $this->hasMany('\App\Task');
+    }
+
+    /**
+     * return acounts
+     * @return object Account
+     */
+    public function accounts() {
+      return $this->hasMany('\App\Account');
     }
 }

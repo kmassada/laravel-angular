@@ -24,10 +24,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
-        //
-
         parent::boot($router);
 
+        // Bind Tasks by full object translated from ID
         $router->bind('tasks', function($id) {
             return \App\Task::find($id);
         });

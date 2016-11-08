@@ -21,7 +21,7 @@ class TaskTagsTableSeeder extends Seeder
       DB::table('tag_task')->insert(
             [
                 'task_id'  => rand(1,20),
-                'tag_id' => rand(1,5),
+                'tag_id' => rand(1,4),
             ]);
       }
     }

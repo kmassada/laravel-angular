@@ -49,13 +49,13 @@ server 'tadbit.cc', user: 'deploy', roles: %w{app db web}
 #
 # The server-based syntax can be used to override options:
 # ------------------------------------
-set :ssh_options, keys: ["config/enc/deploy_id_rsa"] if File.exist?("config/enc/deploy_id_rsa")
+# set :ssh_options, keys: ["config/enc/deploy_id_rsa"] if File.exist?("config/enc/deploy_id_rsa")
 server 'tadbit.cc',
   user: 'deploy',
   roles: %w{web app db},
   ssh_options: {
     user: 'deploy', # overrides user setting above
-    # keys: %w(/home/ken/.ssh/trusted/kmassada@tadbit.cc),
+    keys: %w(/Users/kmassada/.ssh/trusted/deploy_id_rsa),
     # keys: ["config/enc/deploy_id_rsa"] if File.exist?("config/enc/deploy_id_rsa"),
     forward_agent: false,
     auth_methods: %w(publickey password)

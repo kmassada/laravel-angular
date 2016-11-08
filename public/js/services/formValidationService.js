@@ -1,4 +1,4 @@
-angular.module('taskApp')
+angular.module('mainApp')
 .factory('formValidationService', function ($http, $window, url) {
 
   function ApiFormValidationService() {

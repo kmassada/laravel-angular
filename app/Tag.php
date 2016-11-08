@@ -9,7 +9,7 @@ class Tag extends Model
   protected $fillable=['name'];
 
   /**
-   * [tasks description]
+   * Establish Tasks relationship
    * @return [type] [description]
    */
   public function tasks()
