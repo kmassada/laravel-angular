@@ -41,6 +41,10 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+$env = $app->detectEnvironment(function()
+{
+    return getenv('APP_ENV') ?: 'production';
+});
 /*
 |--------------------------------------------------------------------------
 | Return The Application
