@@ -1,16 +1,17 @@
-angular.module('taskApp')
+angular.module('mainApp.task')
 	.directive('taskFormField', taskFormField);
-	
+
 taskFormField.$inject = ['$timeout'];
 
 function taskFormField($timeout) {
 	var service = {
 		restrict: 'EA',
-		templateUrl: 'partials/directives/_form-field.html',
+		templateUrl: 'views/directives/_form-field.html',
 		replace: true,
 		scope: {
 			ngModel: '=',
 			field: '@',
+			label: '@',
 			live: '@',
 			required: '@',
 			fieldPlaceholder: '@',

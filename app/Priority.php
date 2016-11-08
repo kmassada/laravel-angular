@@ -9,7 +9,7 @@ class Priority extends Model
   protected $fillable=['name'];
 
   /**
-   * [tasks description]
+   * Establish rationship with tasks
    * @return [type] [description]
    */
   public function tasks()

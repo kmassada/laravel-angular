@@ -64,13 +64,13 @@ create folder structure
 │   ├── bower
 │   └── http-server
 ├── package.json
-└── partials                 // view partials
+└── views                 // view views
     └── home
 ```
 
 Starting angular to me, this makes more sense as a folder structure.
 we have a classic MVW structure, Controller, and app initialization lives in the JS folder
-View lives in partials folder and instead of model, and the Whatever the rest maybe I have service based architecture
+View lives in views folder and instead of model, and the Whatever the rest maybe I have service based architecture
 
 we first create app.js, giving a name to our main controller, and setting default reoutes
 
@@ -100,13 +100,13 @@ we can leave `js/services` blank for now, and so for `css/app.css`
 
 in index.html, we create boilerplate html code, add resources to what is our main template
 
-ng-view will be the piece overwriten by the partials
+ng-view will be the piece overwriten by the views
 
 ```html
 <div ng-view></div>
 ```
 
-last but not list, create our `partials/home/index.html`
+last but not list, create our `views/home/index.html`
 
 ```html
 <p>hello world</p>

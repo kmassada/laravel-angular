@@ -1,3 +1,9 @@
+#PRE REQ
+composer self-update
+composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
+# NODE_ENV=production npm install #npm only for dev
+bower install --production
+
 #DB SETUP
 DB_ROOT_PASSWORD=$1
 DB_PASSWORD=$2
@@ -12,11 +18,9 @@ EOF
 mysql --user="root" --password="${DB_ROOT_PASSWORD}"  < $SITE-setup.sql
 rm $SITE-setup.sql
 
-#serve
-cd public
-port="7555"
-python -c $'import SimpleHTTPServer;\nmap = SimpleHTTPServer.SimpleHTTPRequestHandler.extensions_map;\nmap[""] = "text/plain";\nfor key, value in map.items():\n\tmap[key] = value + ";charset=UTF-8";\nSimpleHTTPServer.test();' "$port"
-
 # migrate
 php artisan migrate
 php artisan migrate:refresh --seed
+
+#touches
+sed -i 's/laravel5\-ng\.dev/pioneer.tadbit.cc/g' public/js/app.js

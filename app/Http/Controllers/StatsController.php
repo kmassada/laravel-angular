@@ -11,6 +11,11 @@ use App\Http\Controllers\Controller;
 
 class ApiRequestsController extends Controller {
 
+	/**
+	 * Get all the user stats on user login/logout
+	 * @param  Request $request Htttp Get
+	 * @return JSon response           All the stats
+	 */
 	function getStats(Request $request) {
 
     $allowed_columns = ['last_login', 'ip'];

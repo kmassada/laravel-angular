@@ -22,13 +22,13 @@ class TaskRequest extends Request
         return false;
       }
 
-      // verify if task is user's
-      $task = Task::own()->first();
-      if ($task) {
-        return true;
-      }
+      // // verify if task is user's
+      // $task = Task::own()->first();
+      // if ($task) {
+      //   return true;
+      // }
 
-      return false;
+      return true;
     }
 
     /**

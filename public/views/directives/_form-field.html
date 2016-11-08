@@ -18,8 +18,8 @@
       <button class='btn' ng-click='remove(field)'><span class='glyphicon glyphicon-remove-circle'></span></button>
   </span>
 
-  <div class="has-error" ng-show='{{field}}.$dirty && {{field}}.$invalid' ng-messages='field.$error'>
-    <p class='control-label' ng-messages='required'>{{field}} is required</p>
+  <div class="has-error" ng-show='{{field}}.$dirty && {{field}}.$invalid || {{field}}.$pristine && {{field}}.$invalid ' ng-messages='field.$error'>
+    <p class='control-label' ng-messages='required'>{{label}} is required</p>
     <p class='control-label' ng-repeat='(k,v) in types' ng-message='{{k}}'>field {{v}}</p>
   </div>
 
